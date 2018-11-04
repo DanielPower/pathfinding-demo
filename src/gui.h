@@ -5,11 +5,12 @@
 
 class Gui {
 private:
-	sf::Window window;
+	sf::RenderWindow window;
+	sf::Sprite sprite;
 
 public:
 	void init();
-	void update();
+	bool update();
 };
 
 #endif
