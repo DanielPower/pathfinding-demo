@@ -262,3 +262,6 @@ __pycache__/
 *.pyc
 /CppProperties.json
 /.gitattributes
+*.sln
+*.vcxproj
+*.filters
