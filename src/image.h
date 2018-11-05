@@ -4,9 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "map.h"
+#include "common.h"
 
-class Image {
-public:
+namespace image {
 	Map load(std::string filename);
 	void save(sf::Image, std::string filename);
 };

@@ -3,14 +3,15 @@
 
 #include <vector>
 #include "tile.h"
+#include "common.h"
 
 class Map
 {
 public:
 	std::vector<std::vector<Tile>> map;
-	int width;
-	int height;
-	
+	uint width;
+	uint height;
+
 	Map(uint width, uint height);
 	Tile get(uint x, uint y);
 };

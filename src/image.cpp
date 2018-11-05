@@ -1,7 +1,7 @@
 #include "image.h"
 #include "map.h"
 
-Map Image::load(std::string filename) {
+Map image::load(std::string filename) {
 	sf::Image image;
 	image.loadFromFile(filename);
 	sf::Vector2u size = image.getSize();

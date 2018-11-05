@@ -1,23 +1,17 @@
 #include "gui.h"
 #include "image.h"
-#include "map.h"
-#include <iostream>
 
 Gui gui;
-Image image;
 
 int main() {
+	// Initialize GUI Window
 	gui.init();
-	Map map = image.load("image.jpg");
-	for (uint x=0; x < map.width; x++) {
-		for (uint y=0; y<map.height; y++) {
-			std::cout << map.map[x][y].height << " ";
-		}
-		std::cout << std::endl;
-	}
+	Map map = image::load("map.bmp");
 
+	// Update and render GUI
 	bool isRunning = true;
 	while (isRunning) {
 		isRunning = gui.update();
+		gui.render();
 	}
 }
