@@ -16,7 +16,6 @@ public:
 	Map(uint width, uint height);
 	Tile get(uint x, uint y);
 	void set(uint x, uint y, Tile tile);
-	void push_back(Tile tile);
 	int getIndex(uint x, uint y);
 };
 
