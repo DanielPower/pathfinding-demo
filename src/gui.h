@@ -13,6 +13,12 @@ private:
 	sf::Sprite sprite;
 	sf::Image image;
 	sf::Texture texture;
+	sf::View view;
+	float zoom;
+	int prevMouseX;
+	int prevMouseY;
+	int deltaMouseX;
+	int deltaMouseY;
 
 public:
 	void init();
