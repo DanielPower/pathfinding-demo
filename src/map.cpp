@@ -5,11 +5,12 @@ Map::Map(uint width, uint height)
 , height(height)
 {
 	map.resize(width);
-	for (uint x=0; x < width; x++) {
+	for (uint x=0; x < width; x++)
+	{
 		map[x].resize(height);
 	}
 }
 
-Tile Map::get(uint x, uint y) {
-	return map[x][y];
+std::vector<Tile> Map::operator[](uint index) {
+	return map[index];
 }

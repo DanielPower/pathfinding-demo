@@ -1,5 +1,9 @@
 #include "tile.h"
 
+Tile::Tile(float height)
+: height(height)
+{}
+
 sf::Color Tile::getColor()
 {
 	sf::Color clr;

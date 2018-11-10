@@ -12,8 +12,7 @@ public:
 	float wood;
 	float ore;
 	Tile() {};
-	Tile(float height)
-		: height(height) {};
+	Tile(float height);
 	sf::Color getColor();
 };
 

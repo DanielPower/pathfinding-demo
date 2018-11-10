@@ -14,6 +14,8 @@ public:
 
 	Map(uint width, uint height);
 	Tile get(uint x, uint y);
+
+	std::vector<Tile> operator[](uint index);
 };
 
 #endif
