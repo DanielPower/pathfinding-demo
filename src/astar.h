@@ -3,8 +3,16 @@
 #include "map.h"
 #include "common.h"
 #include <vector>
+#include <queue>
 
-std::vector<>
+std::vector<Tile> astar_vanilla(Map map, Tile start, Tile end);
 
+struct path_node
+{
+	Tile tile;
+	uint gCost;
+	uint hCost =0 ;
+	path_node(Tile t);
+};
 
 #endif
