@@ -10,18 +10,18 @@ void Gui::init()
 	{
 		for (uint y=0; y<map.height; y++)
 		{
-			Tile tile = map[x][y];
-			if (tile.height < 0.3)
+			Tile tile = map.get(x, y);
+			if (tile.getSector() == 0)
 			{
-				image.setPixel(x, y, sf::Color::Blue);
+				image.setPixel(x, y, sf::Color(tile.getHeight()*255, tile.getHeight()*255, tile.getHeight()*255));
 			} 
-			else if (tile.height > 0.7)
+			else if (tile.getSector() == 1)
 			{
-				image.setPixel(x, y, sf::Color(128, 128, 128));;
+				image.setPixel(x, y, sf::Color(tile.getHeight()*255, tile.getHeight()*255, tile.getHeight()*255));
 			} 
 			else
 			{
-				image.setPixel(x, y, sf::Color::Green);
+				image.setPixel(x, y, sf::Color(tile.getHeight()*255, tile.getHeight()*255, tile.getHeight()*255));
 			}
 		}
 	}

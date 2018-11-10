@@ -1,14 +1,16 @@
 #include "tile.h"
 
 Tile::Tile(float height)
-: height(height)
-{}
-
-sf::Color Tile::getColor()
 {
-	sf::Color clr;
-	if (height < .2) clr = sf::Color::Blue;
-	else if (height > .8) clr = sf::Color(127, 127, 127);
-	else clr = sf::Color::Green;
-	return clr;
+	if (height < 0.2)		sector = 0;
+	else if (height > 0.8)	sector = 1;
+	else					sector = 2;
+}
+
+uint Tile::getSector() {
+	return sector;
+}
+
+float Tile::getHeight() {
+	return height;
 }

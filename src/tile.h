@@ -7,13 +7,13 @@
 class Tile
 {
 public:
-	float height;
-	float food;
-	float wood;
-	float ore;
-	Tile() {};
 	Tile(float height);
-	sf::Color getColor();
+	uint getSector();
+	float getHeight();
+
+private:
+	uint sector;
+	float height;
 };
 
 #endif
