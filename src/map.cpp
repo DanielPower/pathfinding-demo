@@ -5,6 +5,7 @@ Map::Map(uint width, uint height)
 , height(height)
 {
 	size = width*height;
+	map.resize(width*height);
 }
 
 int Map::getIndex(uint x, uint y)

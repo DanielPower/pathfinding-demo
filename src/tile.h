@@ -7,12 +7,12 @@
 class Tile
 {
 public:
-	Tile(float height);
-	uint getSector();
+	Tile();
+	void setHeight(float height);
 	float getHeight();
 
 private:
-	uint sector;
+	uint index;
 	float height;
 };
 

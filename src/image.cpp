@@ -14,8 +14,9 @@ Map image::load(std::string filename)
 		{
 			sf::Color pixel = image.getPixel(x, y);
 			float value = (float)(pixel.r + pixel.g + pixel.b) / 765;
-			Tile tile(value);
-			map.push_back(tile);
+			Tile tile;
+			tile.setHeight(value);
+			map.set(x, y, tile);
 		}
 	}
 
