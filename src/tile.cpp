@@ -11,6 +11,11 @@ void Tile::setIndex(uint _index)
 	index = _index;
 }
 
+void Tile::setTravelCost(float cost)
+{
+	travelCost = cost;
+}
+
 float Tile::getHeight() {
 	return height;
 }

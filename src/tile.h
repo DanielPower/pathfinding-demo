@@ -10,6 +10,7 @@ public:
 	Tile();
 	void setHeight(float height);
 	void setIndex(uint index);
+	void setTravelCost(float cost);
 	float getHeight();
 	int getIndex();
 	float getTravelCost();
