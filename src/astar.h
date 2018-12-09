@@ -4,33 +4,22 @@
 #include "common.h"
 #include <vector>
 #include <queue>
-class AStar
+#include "pathfinding.h"
+class AStar : public Pathfinding
 {
 public:
-	Map map;
-	AStar(const Map& _map);
+	AStar(const Map& map);
+	std::vector<Tile> getPath() override;
+	void step() override;
+	std::vector<Tile> getOpenList() override;
+	std::vector<Tile> getClosedList() override;
 	std::vector<Tile> vanilla(Tile start, Tile end);
-
-private:
-	//heuristics
-	//float (AStar::*heuristic)(Tile p1, Tile p2) = h_Euclidian;
-	float h_Manhattan4(Tile p1, Tile p2);
-	float h_Manhattan8(Tile p1, Tile p2);
-	float h_Euclidian(Tile p1, Tile p2);
 };
 
-struct path_node 
+struct AStarNode : PathNode
 {
-	Tile tile;
-	uint gCost;
 	uint hCost = 0;
-	path_node(Tile t);
-	friend bool operator< (const path_node& lhs, const path_node& rhs) { return lhs.gCost + lhs.hCost < rhs.gCost + rhs.hCost; };
-	friend bool operator> (const path_node& lhs, const path_node& rhs) { return rhs < lhs; }
-	friend bool operator<=(const path_node& lhs, const path_node& rhs) { return !(lhs > rhs); }
-	friend bool operator>=(const path_node& lhs, const path_node& rhs) { return !(lhs < rhs); }
+	uint getCost() const { return gCost+hCost; }
 };
-
-
 
 #endif
