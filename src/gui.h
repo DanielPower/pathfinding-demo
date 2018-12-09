@@ -1,7 +1,7 @@
 #ifndef GUI_H
 #define GUI_H
 
-#include <SFML/Graphics.hpp>
+#include "/users/labnet4/st6/djp468/.sfml/include/SFML/Graphics.hpp"
 #include "common.h"
 #include "map.h"
 #include "image.h"

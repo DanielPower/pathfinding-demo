@@ -17,11 +17,11 @@ void Gui::init()
 			if (tile.getHeight() < 0.3)
 			{
 				image.setPixel(x, y, sf::Color(0, 0, 128));
-			} 
+			}
 			else if (tile.getHeight() > 0.7)
 			{
 				image.setPixel(x, y, sf::Color(128, 128, 128));
-			} 
+			}
 			else
 			{
 				image.setPixel(x, y, sf::Color(0, 128, 0));
@@ -66,9 +66,8 @@ bool Gui::update()
 			}
 		}
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			view.move(-deltaMouseX*zoom, -deltaMouseY*zoom);
-			std::cout << deltaMouseX << std::endl;
 		}
 
 		return true;
