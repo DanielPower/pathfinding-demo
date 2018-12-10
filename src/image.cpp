@@ -16,6 +16,7 @@ Map image::load(std::string filename)
 			float value = (float)(pixel.r + pixel.g + pixel.b) / 765;
 			Tile tile;
 			tile.setHeight(value);
+			tile.setIndex(x + y * size.y);
 			map.set(x, y, tile);
 		}
 	}

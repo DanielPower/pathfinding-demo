@@ -8,6 +8,7 @@
 class Map
 {
 public:
+	enum LegalActions{CARDINAL, DIAGONAL};
 	std::vector<Tile> map;
 	uint width;
 	uint height;
@@ -17,6 +18,12 @@ public:
 	Tile get(uint x, uint y);
 	void set(uint x, uint y, Tile tile);
 	int getIndex(uint x, uint y);
+	tileArray Map::getLegalNeighbours(Tile t);
+	void setLegalActions(LegalActions actions);
+	bool isOOB(int x, int y);
+private:
+	LegalActions currentLegalActions = DIAGONAL;
+	std::vector<std::vector<int>> legalActions;
 };
 
 #endif
