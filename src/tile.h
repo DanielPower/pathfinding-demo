@@ -11,9 +11,9 @@ public:
 	void setHeight(float height);
 	void setIndex(uint index);
 	void setTravelCost(float cost);
-	float getHeight();
-	int getIndex();
-	float getTravelCost();
+	const float getHeight();
+	const int getIndex();
+	const float getTravelCost();
 private:
 	uint index;
 	float height;
