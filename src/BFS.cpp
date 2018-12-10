@@ -12,7 +12,7 @@ void BFS::step()
 	openList.pop();
 	if (next.tile.getIndex() == destination)
 	{
-		makePath(next);
+		Pathfinding::makePath(next);
 		status = FINISHED;
 		return;
 	}
