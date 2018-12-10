@@ -12,7 +12,8 @@ int main()
 	AStar pathFind = AStar(map);
 	BFS pathBFS = BFS(map);
 	pathBFS.step();
-	std::cout << "created map of size " << pathFind.map.size << std::endl;
+	auto t = map.get(5, 5);
+	auto n = map.getLegalNeighbours(t); //again just to show this works
 
 	// Initialize GUI Window
 	gui.init();

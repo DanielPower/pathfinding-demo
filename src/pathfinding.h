@@ -42,9 +42,9 @@ public:
 	virtual void step() = 0;
 	virtual tileArray getOpenList() = 0;
 	virtual tileArray getClosedList() = 0;
-	void makePath(PathNode destination);
 
 protected:
+	void makePath(PathNode destination);
 	tileArray path;
 };
 
