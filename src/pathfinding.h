@@ -1,7 +1,7 @@
 #ifndef PATHFINDING
 #define PATHFINDING
 
-#include "common.h"
+#include "common.hpp"
 #include "map.h"
 
 enum PathStatus
@@ -13,7 +13,6 @@ enum PathStatus
 
 struct PathNode
 {
-	//Tile& tile;
 	std::shared_ptr<Tile> tile;
 	uint gCost;
 	uint getCost() const { return gCost; }

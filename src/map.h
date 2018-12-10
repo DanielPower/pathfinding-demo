@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "tile.h"
-#include "common.h"
+#include "common.hpp"
 
 class Map
 {
