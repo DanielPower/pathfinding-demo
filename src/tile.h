@@ -14,6 +14,8 @@ public:
 	void setTravelCost(float cost);
 	const float getHeight() const;
 	const uint getIndex() const;
+	const uint getX(const uint& width) const;
+	const uint getY(const uint& width) const;
 	const float getTravelCost() const;
 private:
 	uint index;

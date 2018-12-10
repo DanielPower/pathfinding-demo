@@ -1,22 +1,22 @@
+#include "common.hpp"
 #include "gui.h"
 #include "image.h"
 #include "astar.h"
-#include "BFS.h"
+#include "bfs.h"
 
 Gui gui;
 
 int main()
 {
-	//Create an A* object just so we know we can without blowing stuff up
-	Map map = image::load("map.bmp");
-	AStar pathFind = AStar(map);
-	BFS pathBFS = BFS(map);
-	pathBFS.step();
+	// Create an A* object just so we know we can without blowing stuff up
+	Map map = Image::load("map.bmp");
+	std::shared_ptr<Pathfinding> aStar = std::make_shared<AStar>(map); // FIXME - Causes linter warning, not sure why. Seems to work though.
+	std::shared_ptr<Pathfinding> bfs = std::make_shared<BFS>(map);  // FIXME
+	bfs->step();
 	auto t = map.get(5, 5);
-	auto n = map.getLegalNeighbours(t); //again just to show this works
+	auto n = map.getLegalNeighbours(t); // again just to show this works
 
-	// Initialize GUI Window
-	gui.init();
+	std::vector<std::shared_ptr<Pathfinding>> pathfinders = {aStar, bfs};
 
 	// Update and render GUI
 	bool isRunning = true;

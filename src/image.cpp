@@ -1,7 +1,7 @@
 #include "image.h"
 #include "map.h"
 
-Map image::load(std::string filename)
+Map Image::load(std::string filename)
 {
 	sf::Image image;
 	image.loadFromFile(filename);

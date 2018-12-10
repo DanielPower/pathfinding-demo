@@ -1,7 +1,7 @@
 #ifndef PATHFINDING
 #define PATHFINDING
 
-#include "common.h"
+#include "common.hpp"
 #include "map.h"
 
 enum PathStatus
@@ -50,4 +50,3 @@ protected:
 };
 
 #endif
-

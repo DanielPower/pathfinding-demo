@@ -1,4 +1,4 @@
-#include "BFS.h"
+#include "bfs.h"
 
 
 void BFS::step()

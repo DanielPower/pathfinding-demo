@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "tile.h"
-#include "common.h"
+#include "common.hpp"
 
 class Map
 {
@@ -14,6 +14,7 @@ public:
 	uint height;
 	uint size;
 
+	Map();
 	Map(uint width, uint height);
 	const std::shared_ptr<Tile> get(uint x, uint y) const;
 	void set(uint x, uint y, Tile tile);

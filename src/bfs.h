@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 
-class BFS : Pathfinding
+class BFS : public Pathfinding
 {
 private:
 	std::deque<PathNode> openList;
@@ -19,5 +19,3 @@ public:
 	tileArray getOpenList() override;
 	tileArray getClosedList() override;
 };
-
-

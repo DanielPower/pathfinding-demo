@@ -6,7 +6,7 @@
 #include "map.h"
 #include "common.hpp"
 
-namespace image
+namespace Image
 {
 	Map load(std::string filename);
 	void save(sf::Image, std::string filename);

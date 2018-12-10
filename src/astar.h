@@ -4,6 +4,8 @@
 #include "common.hpp"
 #include <vector>
 #include "pathfinding.h"
+
+
 class AStar : public Pathfinding
 {
 public:

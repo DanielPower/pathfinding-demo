@@ -1,6 +1,13 @@
 #include "map.h"
 #include <iostream>
 
+// HACK - I don't think this constructor should even exist, but it avoids errors in gui
+Map::Map()
+	: width(0)
+	, height(0)
+	, size(0)
+	{}
+
 Map::Map(uint width, uint height)
 	: width(width)
 	, height(height)

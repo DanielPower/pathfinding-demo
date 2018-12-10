@@ -1,7 +1,7 @@
 g++ -o bin/main \
 -I/users/labnet4/st6/djp468/.sfml/include \
 src/astar.cpp \
-src/BFS.cpp \
+src/bfs.cpp \
 src/gui.cpp \
 src/image.cpp \
 src/main.cpp \
