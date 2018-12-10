@@ -15,6 +15,7 @@ public:
 	void step() override;
 	tileArray getOpenList() override;
 	tileArray getClosedList() override;
+	void setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination) override;
 };
 
 struct AStarNode : PathNode

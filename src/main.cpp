@@ -11,9 +11,17 @@ int main()
 	Map map = image::load("map.bmp");
 	AStar pathFind = AStar(map);
 	BFS pathBFS = BFS(map);
+	auto start = map.get(5, 5);
+	auto end = map.get(25, 25);
+	pathBFS.setGoal(start, end);
 	pathBFS.step();
-	auto t = map.get(5, 5);
-	auto n = map.getLegalNeighbours(t); //again just to show this works
+	pathBFS.step();
+	pathBFS.step();
+	auto ol = pathBFS.getOpenList();
+	for (auto tile : pathBFS.getOpenList())
+	{
+		std::cout << "Tile : " << tile->getIndex() % map.width << " , " << tile->getIndex() / map.width <<std::endl;
+	}
 
 	// Initialize GUI Window
 	gui.init();

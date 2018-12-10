@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 
-class BFS : Pathfinding
+class BFS : public Pathfinding
 {
 private:
 	std::deque<PathNode> openList;
@@ -15,6 +15,7 @@ public:
 	{
 	}
 
+	void setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination) override;
 	void step() override;
 	tileArray getOpenList() override;
 	tileArray getClosedList() override;
