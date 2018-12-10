@@ -1,9 +1,5 @@
 #include "BFS.h"
 
-std::vector<Tile&> BFS::getPath()
-{
-	return std::vector<Tile&>();
-}
 
 void BFS::step()
 {
@@ -14,20 +10,25 @@ void BFS::step()
 	}
 	auto next = openList.front();
 	openList.pop();
-	if (next.getIndex() == destination)
+	if (next.tile.getIndex() == destination)
 	{
+		makePath(next);
 		status = FINISHED;
 		return;
 	}
+	auto cListCheck = closedList.find(next.tile.getIndex());
+	if (cListCheck == closedList.end()) return;
+	closedList.insert(next.tile.getIndex());
+	//todo add legal neighbours to open list
 
 }
 
-std::vector<Tile&> BFS::getOpenList()
+tileArray BFS::getOpenList()
 {
-	return std::vector<Tile&>();
+	return tileArray();
 }
 
-std::vector<Tile&> BFS::getClosedList()
+tileArray BFS::getClosedList()
 {
-	return std::vector<Tile&>();
+	return tileArray();
 }

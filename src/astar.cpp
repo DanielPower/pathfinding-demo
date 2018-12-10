@@ -1,24 +1,15 @@
 #include "astar.h"
 
-AStar::AStar(const Map& map) : Pathfinding(map)
-{
-}
-
-std::vector<Tile> AStar::getPath()
-{
-	return std::vector<Tile>();
-}
-
 void AStar::step()
 {
 }
 
-std::vector<Tile> AStar::getOpenList()
+tileArray AStar::getOpenList()
 {
-	return std::vector<Tile>();
+	return tileArray();
 }
 
-std::vector<Tile> AStar::getClosedList()
+tileArray AStar::getClosedList()
 {
-	return std::vector<Tile>();
+	return tileArray();
 }

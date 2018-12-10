@@ -30,7 +30,6 @@ class Pathfinding
 {
 public:
 	const Map& map;
-	std::vector<Tile&> path;
 	uint origin;
 	uint destination;
 	PathStatus status = IN_PROGRESS;
@@ -39,27 +38,15 @@ public:
 		: map(map)
 	{
 	}
-
-	void setGoal(Tile& _origin, Tile& _destination)
-	{
-		origin = _origin.getIndex();
-		destination = _destination.getIndex();
-	}
+	void setGoal(Tile& _origin, Tile& _destination);
 	virtual void step() = 0;
-	virtual std::vector<Tile&> getPath() = 0;
-	virtual std::vector<Tile&> getOpenList() = 0;
-	virtual std::vector<Tile&> getClosedList() = 0;
+	virtual tileArray getOpenList() = 0;
+	virtual tileArray getClosedList() = 0;
 
-private:
-	// once you have reached the destination, we iterate back over the pathnodes and add their Tiles
-	void setPath(PathNode destination)
-	{
-		//todo 
-	}
-
+protected:
+	void makePath(PathNode destination);
+	tileArray path;
 };
-
-
 
 #endif
 

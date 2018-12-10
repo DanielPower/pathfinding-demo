@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "common.h"
 
+
 class Tile
 {
 public:
@@ -12,12 +13,14 @@ public:
 	void setIndex(uint index);
 	void setTravelCost(float cost);
 	const float getHeight();
-	const int getIndex();
+	const uint getIndex();
 	const float getTravelCost();
 private:
 	uint index;
 	float height;
 	float travelCost;
 };
+
+typedef std::vector<std::shared_ptr<Tile>> tileArray;
 
 #endif

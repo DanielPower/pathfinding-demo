@@ -3,17 +3,18 @@
 #include "map.h"
 #include "common.h"
 #include <vector>
-#include <queue>
 #include "pathfinding.h"
 class AStar : public Pathfinding
 {
 public:
-	AStar(const Map& map);
-	std::vector<Tile> getPath() override;
+	explicit AStar(const Map& map)
+		: Pathfinding(map)
+	{
+	}
+
 	void step() override;
-	std::vector<Tile> getOpenList() override;
-	std::vector<Tile> getClosedList() override;
-	std::vector<Tile> vanilla(Tile start, Tile end);
+	tileArray getOpenList() override;
+	tileArray getClosedList() override;
 };
 
 struct AStarNode : PathNode

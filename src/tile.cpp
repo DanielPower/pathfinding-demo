@@ -20,7 +20,7 @@ const float Tile::getHeight() {
 	return height;
 }
 
-const int Tile::getIndex()
+const uint Tile::getIndex()
 {
 	return index;
 }
