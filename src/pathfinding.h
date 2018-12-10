@@ -13,7 +13,6 @@ enum PathStatus
 
 struct PathNode
 {
-	//Tile& tile;
 	std::shared_ptr<Tile> tile;
 	uint gCost;
 	uint getCost() const { return gCost; }
@@ -39,7 +38,8 @@ public:
 		: map(map)
 	{
 	}
-	void setGoal(Tile& _origin, Tile& _destination);
+
+	virtual void setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination) = 0;
 	virtual void step() = 0;
 	virtual tileArray getOpenList() = 0;
 	virtual tileArray getClosedList() = 0;
