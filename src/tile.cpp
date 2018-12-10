@@ -16,16 +16,17 @@ void Tile::setTravelCost(float cost)
 	travelCost = cost;
 }
 
-const float Tile::getHeight() {
+const float Tile::getHeight() const 
+{
 	return height;
 }
 
-const uint Tile::getIndex()
+const uint Tile::getIndex() const 
 {
 	return index;
 }
 
-const float Tile::getTravelCost()
+const float Tile::getTravelCost() const
 {
 	return travelCost;
 }

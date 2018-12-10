@@ -12,9 +12,9 @@ public:
 	void setHeight(float height);
 	void setIndex(uint index);
 	void setTravelCost(float cost);
-	const float getHeight();
-	const uint getIndex();
-	const float getTravelCost();
+	const float getHeight() const;
+	const uint getIndex() const;
+	const float getTravelCost() const;
 private:
 	uint index;
 	float height;

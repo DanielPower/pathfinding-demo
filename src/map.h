@@ -15,12 +15,12 @@ public:
 	uint size;
 
 	Map(uint width, uint height);
-	Tile get(uint x, uint y);
+	const std::shared_ptr<Tile> get(uint x, uint y) const;
 	void set(uint x, uint y, Tile tile);
-	int getIndex(uint x, uint y);
-	tileArray Map::getLegalNeighbours(Tile t);
+	const int getIndex(uint x, uint y) const;
+	const tileArray getLegalNeighbours(std::shared_ptr<Tile> t)const;
 	void setLegalActions(LegalActions actions);
-	bool isOOB(int x, int y);
+	const bool isOOB(int x, int y)const;
 private:
 	LegalActions currentLegalActions = DIAGONAL;
 	std::vector<std::vector<int>> legalActions;

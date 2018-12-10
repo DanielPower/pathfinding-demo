@@ -13,11 +13,12 @@ enum PathStatus
 
 struct PathNode
 {
-	Tile& tile;
+	//Tile& tile;
+	std::shared_ptr<Tile> tile;
 	uint gCost;
 	uint getCost() const { return gCost; }
 	Tile* parent = nullptr;
-	PathNode(Tile t) : tile(t)
+	PathNode(std::shared_ptr<Tile> t) : tile(t)
 	{
 	}
 	friend bool operator< (const PathNode& lhs, const PathNode& rhs) { return lhs.getCost() < rhs.getCost(); };

@@ -13,7 +13,7 @@ void Gui::init()
 	{
 		for (uint y=0; y<map.height; y++)
 		{
-			Tile tile = map.get(x, y);
+			Tile tile = *map.get(x, y);
 			if (tile.getHeight() < 0.3)
 			{
 				image.setPixel(x, y, sf::Color(0, 0, 128));

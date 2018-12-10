@@ -10,23 +10,23 @@ Map::Map(uint width, uint height)
 	setLegalActions(DIAGONAL);
 }
 
-int Map::getIndex(uint x, uint y)
+const int Map::getIndex(uint x, uint y) const
 {
 	return y * width + x;
 }
 
-tileArray Map::getLegalNeighbours(Tile t)
+const tileArray Map::getLegalNeighbours(std::shared_ptr<Tile> t)const
 {
 	tileArray out;
-	uint x = t.getIndex() % width;
-	uint y = t.getIndex() / width;
+	uint x = t->getIndex() % width;
+	uint y = t->getIndex() / width;
 	for (auto dir : legalActions)
 	{
 		int nx = dir[0] + x; //can't use uint because values might be negative and we need to know for OOB
 		int ny = dir[1] + y;
 		if (isOOB(nx, ny)) continue;
 		//todo: check for tile 'type' sameness
-		auto tile = std::make_shared<Tile>(get(nx, ny));
+		auto tile = get(nx, ny);
 		out.push_back(tile);
 	}
 	return out;
@@ -50,14 +50,14 @@ void Map::setLegalActions(LegalActions moves)
 	}
 }
 
-bool Map::isOOB(int x, int y)
+const bool Map::isOOB(int x, int y) const
 {
 	return (x < 0 || y < 0 || x >= width || y >= height);
 }
 
-Tile Map::get(uint x, uint y)
+const std::shared_ptr<Tile> Map::get(uint x, uint y) const
 {
-	return map[getIndex(x, y)];
+	return std::make_shared<Tile>(map[getIndex(x, y)]);
 }
 
 void Map::set(uint x, uint y, Tile tile)
