@@ -2,7 +2,7 @@
 #define TILE_H
 
 #include <SFML/Graphics.hpp>
-#include "common.h"
+#include "common.hpp"
 
 
 class Tile

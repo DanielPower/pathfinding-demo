@@ -1,7 +1,7 @@
 #ifndef PATHFINDING
 #define PATHFINDING
 
-#include "common.h"
+#include "common.hpp"
 #include "map.h"
 
 enum PathStatus
@@ -17,9 +17,9 @@ struct PathNode
 	uint gCost;
 	uint getCost() const { return gCost; }
 	Tile* parent = nullptr;
-	PathNode(Tile t) : tile(t)
-	{
-	}
+	PathNode(Tile& t)
+		: tile(t)
+		{}
 	friend bool operator< (const PathNode& lhs, const PathNode& rhs) { return lhs.getCost() < rhs.getCost(); };
 	friend bool operator> (const PathNode& lhs, const PathNode& rhs) { return rhs < lhs; }
 	friend bool operator<=(const PathNode& lhs, const PathNode& rhs) { return !(lhs > rhs); }

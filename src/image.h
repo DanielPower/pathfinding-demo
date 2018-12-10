@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "map.h"
-#include "common.h"
+#include "common.hpp"
 
 namespace image
 {
