@@ -18,7 +18,7 @@ public:
 	Tile get(uint x, uint y);
 	void set(uint x, uint y, Tile tile);
 	int getIndex(uint x, uint y);
-	tileArray Map::getLegalNeighbours(Tile t);
+	tileArray getLegalNeighbours(Tile t);
 	void setLegalActions(LegalActions actions);
 	bool isOOB(int x, int y);
 private:
