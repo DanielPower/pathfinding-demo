@@ -1,9 +1,12 @@
 g++ -o bin/main \
 -I/users/labnet4/st6/djp468/.sfml/include \
-src/main.cpp \
+src/astar.cpp \
+src/BFS.cpp \
 src/gui.cpp \
 src/image.cpp \
+src/main.cpp \
 src/map.cpp \
+src/pathfinding.cpp \
 src/tile.cpp \
 -L/users/labnet4/st6/djp468/.sfml/lib \
 -lsfml-graphics \

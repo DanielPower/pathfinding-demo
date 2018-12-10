@@ -1,13 +1,13 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 #include "map.h"
-#include "common.h"
+#include "common.hpp"
 #include <vector>
 #include "pathfinding.h"
 class AStar : public Pathfinding
 {
 public:
-	explicit AStar(const Map& map)
+	AStar(const Map& map)
 		: Pathfinding(map)
 	{
 	}

@@ -2,7 +2,7 @@
 #define GUI_H
 
 #include <SFML/Graphics.hpp>
-#include "common.h"
+#include "common.hpp"
 #include "map.h"
 #include "image.h"
 
