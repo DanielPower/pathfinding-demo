@@ -20,10 +20,10 @@ struct PathNode
 	PathNode(std::shared_ptr<Tile> t) : tile(t)
 	{
 	}
-	friend bool operator< (const PathNode& lhs, const PathNode& rhs) { return lhs.getCost() < rhs.getCost(); };
-	friend bool operator> (const PathNode& lhs, const PathNode& rhs) { return rhs < lhs; }
-	friend bool operator<=(const PathNode& lhs, const PathNode& rhs) { return !(lhs > rhs); }
-	friend bool operator>=(const PathNode& lhs, const PathNode& rhs) { return !(lhs < rhs); }
+	friend bool operator < (const PathNode& lhs, const PathNode& rhs) { return lhs.getCost() < rhs.getCost(); };
+	friend bool operator > (const PathNode& lhs, const PathNode& rhs) { return rhs < lhs; }
+	friend bool operator <= (const PathNode& lhs, const PathNode& rhs) { return !(lhs > rhs); }
+	friend bool operator >= (const PathNode& lhs, const PathNode& rhs) { return !(lhs < rhs); }
 };
 
 class Pathfinding
@@ -34,10 +34,8 @@ public:
 	uint destination;
 	PathStatus status = IN_PROGRESS;
 
-	explicit Pathfinding(const Map& map)
-		: map(map)
-	{
-	}
+	explicit Pathfinding(const Map& map);
+	virtual ~Pathfinding();
 
 	virtual void setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination) = 0;
 	virtual void step() = 0;
