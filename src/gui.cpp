@@ -17,7 +17,7 @@ Gui::Gui()
 
 	// DEBUG - set start/end until implemented in gui
 	auto start = map.get(5, 5);
-	auto end = map.get(9, 9);
+	auto end = map.get(200, 200);
 	currentPathfinder->setGoal(start, end);
 
 	// Create blank images
@@ -116,33 +116,10 @@ bool Gui::update()
 			view.move(-deltaMouseX * zoom, -deltaMouseY * zoom);
 		}
 
-		// Update ImGui
-		ImGui::SFML::Update(window, deltaClock.restart());
-
-		// Setup ImGui Window
-		ImGui::Begin("Hello World!");
-		if (ImGui::Button("Step"))
+		if (continuousStep)
 		{
 			pathfindingStep();
 		}
-		ImGui::SameLine();
-		ImGui::Button("Run");
-		// Add yellow pixel to open_image for each open tile
-		ImGui::BeginChild("List View");
-		ImGui::Columns(2, NULL, false);
-		ImGui::Text("Open Nodes");
-		for (auto tile : currentPathfinder->getOpenList())
-		{
-			ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
-		}
-		ImGui::NextColumn();
-		ImGui::Text("Closed Nodes");
-		for (auto tile : currentPathfinder->getClosedList())
-		{
-			ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
-		}
-		ImGui::EndChild();
-		ImGui::End();
 
 		return true;
 	}
@@ -151,6 +128,33 @@ bool Gui::update()
 
 void Gui::render()
 {
+	// Update ImGui
+	ImGui::SFML::Update(window, deltaClock.restart());
+
+	// Setup ImGui Window
+	ImGui::Begin("Hello World!");
+	ImGui::SameLine();
+	ImGui::Checkbox("Run", &continuousStep);
+	if (ImGui::Button("Step"))
+	{
+		pathfindingStep();
+	}
+	ImGui::BeginChild("List View");
+	ImGui::Columns(2, NULL, false);
+	ImGui::Text("Open Nodes");
+	for (auto tile : currentPathfinder->getOpenList())
+	{
+		ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
+	}
+	ImGui::NextColumn();
+	ImGui::Text("Closed Nodes");
+	for (auto tile : currentPathfinder->getClosedList())
+	{
+		ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
+	}
+	ImGui::EndChild();
+	ImGui::End();
+
 	// Rendering
 	window.setView(view);
 	window.clear(sf::Color::White);

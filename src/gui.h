@@ -50,6 +50,7 @@ private:
 	Map map;
 
 	sf::Clock deltaClock;
+	bool continuousStep = false;
 
 public:
 	Gui();
