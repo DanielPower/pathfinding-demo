@@ -19,7 +19,6 @@ Gui::Gui()
 	auto start = map.get(5, 5);
 	auto end = map.get(9, 9);
 	currentPathfinder->setGoal(start, end);
-	currentPathfinder->step();
 
 	// Create blank images
 	map_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
@@ -65,8 +64,7 @@ Gui::Gui()
 	path_sprite.setTexture(path_texture);
 
 	// Set initial view
-	view.reset(sf::FloatRect(0.f, 0.f, map.width, map.height));
-	view.setViewport(sf::FloatRect(0.f, 0.f, map.width / 1280.f, map.height / 720.f));
+	view.reset(sf::FloatRect(0.f, 0.f, 1280, 720));
 	zoom = 1;
 }
 
@@ -114,7 +112,7 @@ bool Gui::update()
 			}
 		}
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (!ImGui::GetIO().WantCaptureMouse && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			view.move(-deltaMouseX * zoom, -deltaMouseY * zoom);
 		}
 
@@ -123,7 +121,27 @@ bool Gui::update()
 
 		// Setup ImGui Window
 		ImGui::Begin("Hello World!");
-		ImGui::Button("Look at this button");
+		if (ImGui::Button("Step"))
+		{
+			pathfindingStep();
+		}
+		ImGui::SameLine();
+		ImGui::Button("Run");
+		// Add yellow pixel to open_image for each open tile
+		ImGui::BeginChild("List View");
+		ImGui::Columns(2, NULL, false);
+		ImGui::Text("Open Nodes");
+		for (auto tile : currentPathfinder->getOpenList())
+		{
+			ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
+		}
+		ImGui::NextColumn();
+		ImGui::Text("Closed Nodes");
+		for (auto tile : currentPathfinder->getClosedList())
+		{
+			ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
+		}
+		ImGui::EndChild();
 		ImGui::End();
 
 		return true;
@@ -201,13 +219,13 @@ void Gui::pathfindingStep()
 	// Add yellow pixel to open_image for each open tile
 	for (auto tile : currentPathfinder->getOpenList())
 	{
-		open_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 0));
+		open_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 255, 0));
 	}
 
 	// Add green pixel to closed_image for each closed tile
 	for (auto tile : currentPathfinder->getClosedList())
 	{
-		closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 255, 0));
+		closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 0));
 	}
 
 	//Add purple pixels to path if the pathfinding is finished
