@@ -1,4 +1,5 @@
-g++ -o bin/main \
+clang++ -o bin/main \
+-Wall \
 -I/users/labnet4/st6/djp468/.sfml/include \
 src/astar.cpp \
 src/bfs.cpp \
