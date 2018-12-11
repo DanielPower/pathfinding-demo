@@ -35,6 +35,10 @@ private:
 	sf::Sprite closed_sprite;
 	sf::Image closed_image;
 	sf::Texture closed_texture;
+	
+	sf::Sprite path_sprite;
+	sf::Image path_image;
+	sf::Texture path_texture;
 
 	Map map;
 

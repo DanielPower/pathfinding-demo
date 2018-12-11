@@ -16,7 +16,7 @@ struct PathNode
 	std::shared_ptr<Tile> tile;
 	uint gCost;
 	uint getCost() const { return gCost; }
-	Tile* parent = nullptr;
+	std::shared_ptr<PathNode> parent = nullptr;
 	PathNode(std::shared_ptr<Tile> t) : tile(t)
 	{
 	}
@@ -41,6 +41,7 @@ public:
 	virtual void step() = 0;
 	virtual tileArray getOpenList() = 0;
 	virtual tileArray getClosedList() = 0;
+	tileArray getPath();
 
 protected:
 	void makePath(PathNode destination);

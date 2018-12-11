@@ -10,17 +10,17 @@ void BFS::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destinat
 
 void BFS::step()
 {
+	if (status == FINISHED || status == FAILED) return;
 	if (openList.empty())
 	{
-		std::cout << "Openlist empty. Terminating" << std::endl;
 		status = FAILED;
 		return;
 	}
 	auto next = openList.front();
 	openList.pop_front();
+
 	if (next.tile->getIndex() == destination)
 	{
-		std::cout << "Popped terminal node off stack. Ending\n";
 		Pathfinding::makePath(next);
 		status = FINISHED;
 		return;
@@ -29,14 +29,14 @@ void BFS::step()
 	if (cListCheck != closedList.end()) return; //item is already in closed list
 	closedList.insert(next.tile->getIndex());
 	auto neighbours = map.getLegalNeighbours(next.tile);
-	std::cout << "got a list of " << neighbours.size() << " members\n";
 	for (auto tile : neighbours)
 	{
-		std::cout << "Pushing node to open list\n";
 		PathNode n = PathNode(tile);
+		auto cListCheck = closedList.find(n.tile->getIndex());
+		if (cListCheck != closedList.end()) continue;
+		n.parent = std::make_shared<PathNode>(next);
 		openList.push_back(n);
 	}
-
 }
 
 tileArray BFS::getOpenList()
