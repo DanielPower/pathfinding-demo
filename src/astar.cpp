@@ -6,7 +6,12 @@ void AStar::step()
 
 tileArray AStar::getOpenList()
 {
-	return tileArray();
+	tileArray out;
+	//for (auto n : openList)
+	//{
+	//	out.push_back(n.tile);
+	//}
+	return out;
 }
 
 tileArray AStar::getClosedList()
@@ -18,5 +23,7 @@ void AStar::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destin
 {
 	origin = _origin->getIndex();
 	destination = _destination->getIndex();
-	//todo add to open list
+	auto og = std::make_shared<AStarNode>(_origin);
+	openList.push(*og);
 }
+
