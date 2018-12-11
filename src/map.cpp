@@ -59,7 +59,7 @@ void Map::setLegalActions(LegalActions moves)
 
 const bool Map::isOOB(int x, int y) const
 {
-	return (x < 0 || y < 0 || x >= width || y >= height);
+	return (x >= width || y >= height);
 }
 
 const std::shared_ptr<Tile> Map::get(uint x, uint y) const
