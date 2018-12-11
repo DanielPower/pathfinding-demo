@@ -122,9 +122,45 @@ void Gui::render()
 	// Rendering
 	window.setView(view);
 	window.clear(sf::Color::White);
+
+	// Draw map and highlight open/closed nodes
 	window.draw(map_sprite);
 	window.draw(open_sprite);
 	window.draw(closed_sprite);
+
+	// Draw grid lines
+	if (zoom < 0.2f)
+	{
+		sf::Vector2f size = view.getSize();
+		sf::Vector2f position = view.getCenter();
+		float left = position.x - size.x/2.f;
+		float top = position.y - size.y/2.f;
+
+		// Vertical lines
+		for (uint x = 0; x <= floor(size.x/zoom); x++)
+		{
+			sf::Vertex x_line[] =
+			{
+				sf::Vertex(sf::Vector2f((int)left+(int)x-1, top)),
+				sf::Vertex(sf::Vector2f((int)left+(int)x-1, top+size.y))
+			};
+
+			window.draw(x_line, 2, sf::Lines);
+		}
+
+		// Horizontal lines
+		for (uint y = 0; y <= floor(size.y/zoom); y++)
+		{
+			sf::Vertex y_line[] =
+			{
+				sf::Vertex(sf::Vector2f(left, (int)top+(int)y-1)),
+				sf::Vertex(sf::Vector2f(left+size.x, (int)top+(int)y-1))
+			};
+
+			window.draw(y_line, 2, sf::Lines);
+		}
+	}
+
 	window.display();
 }
 
@@ -136,18 +172,21 @@ void Gui::pathfindingStep()
 	open_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
 	closed_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
 
-	std::cout << currentPathfinder->getOpenList().size() << std::endl;
-
 	// Add yellow pixel to open_image for each open tile
 	for (auto tile : currentPathfinder->getOpenList())
 	{
-		std::cout << "tile " << tile->getX(map.width) << " " << tile->getY(map.width) << std::endl;
 		open_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 0));
 	}
 
 	// Add green pixel to closed_image for each closed tile
 	for (auto tile : currentPathfinder->getClosedList())
 	{
-		closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(0, 255, 255));
+		closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 255, 0));
 	}
+
+	open_texture.loadFromImage(open_image);
+	open_sprite.setTexture(open_texture);
+
+	closed_texture.loadFromImage(closed_image);
+	closed_sprite.setTexture(closed_texture);
 }
