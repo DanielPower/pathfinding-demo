@@ -13,8 +13,13 @@ int main()
 	bool isRunning = true;
 	while (isRunning)
 	{
-		isRunning = gui.update();
+		sf::Clock frameTime;
+		while(frameTime.getElapsedTime().asSeconds() < 1/60.f)
+		{
+			isRunning = gui.update();
+		}
 		gui.render();
+		frameTime.restart();
 	}
 	ImGui::SFML::Shutdown();
 }
