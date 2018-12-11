@@ -1,12 +1,6 @@
 #include "map.h"
 #include <iostream>
 
-// HACK - I don't think this constructor should even exist, but it avoids errors in gui
-Map::Map()
-	: width(0)
-	, height(0)
-	, size(0)
-	{}
 
 Map::Map(uint width, uint height)
 	: width(width)
@@ -22,7 +16,7 @@ const int Map::getIndex(uint x, uint y) const
 	return y * width + x;
 }
 
-const tileArray Map::getLegalNeighbours(std::shared_ptr<Tile> t)const
+const tileArray Map::getLegalNeighbours(std::shared_ptr<Tile> t) const
 {
 	tileArray out;
 	uint x = t->getIndex() % width;
@@ -57,7 +51,7 @@ void Map::setLegalActions(LegalActions moves)
 	}
 }
 
-const bool Map::isOOB(int x, int y) const
+const bool Map::isOOB(uint x, uint y) const
 {
 	return (x >= width || y >= height);
 }

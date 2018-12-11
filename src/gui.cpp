@@ -1,12 +1,10 @@
 #include "gui.h"
 
 Gui::Gui()
+: map(Image::load("map.bmp"))
 {
 	// Create window
 	window.create(sf::VideoMode(1280, 720), "COMP 3200");
-
-	// Create map from file
-	Map map = Image::load("map.bmp");
 
 	// Setup vector of pathfinders
 	pathfinders = {
@@ -132,7 +130,6 @@ void Gui::render()
 
 void Gui::pathfindingStep()
 {
-	// FIXME - Crashes here, even though currentPathfinder->step() works fine if run in Gui::Gui()
 	currentPathfinder->step();
 
 	// Clear open and closed images
