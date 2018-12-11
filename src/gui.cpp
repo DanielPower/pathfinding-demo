@@ -81,6 +81,7 @@ bool Gui::update()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
+			ImGui::SFML::ProcessEvent(event);
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
@@ -116,6 +117,14 @@ bool Gui::update()
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			view.move(-deltaMouseX * zoom, -deltaMouseY * zoom);
 		}
+
+		// Update ImGui
+		ImGui::SFML::Update(window, deltaClock.restart());
+
+		// Setup ImGui Window
+		ImGui::Begin("Hello World!");
+		ImGui::Button("Look at this button");
+		ImGui::End();
 
 		return true;
 	}
@@ -167,6 +176,8 @@ void Gui::render()
 		}
 	}
 
+	ImGui::SFML::Render(window);
+
 	window.display();
 }
 
@@ -217,4 +228,9 @@ void Gui::pathfindingStep()
 	path_texture.loadFromImage(path_image);
 	path_sprite.setTexture(path_texture);
 
+}
+
+sf::RenderWindow& Gui::getWindow()
+{
+	return window;
 }

@@ -8,6 +8,7 @@ Gui gui;
 
 int main()
 {
+	ImGui::SFML::Init(gui.getWindow());
 	// Update and render GUI
 	bool isRunning = true;
 	while (isRunning)
@@ -15,4 +16,5 @@ int main()
 		isRunning = gui.update();
 		gui.render();
 	}
+	ImGui::SFML::Shutdown();
 }
