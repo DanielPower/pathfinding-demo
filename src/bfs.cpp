@@ -34,7 +34,7 @@ void BFS::step()
 		return;
 	}
 
-	// If tile is in the clost list, skip it
+	// If tile is in the closed list, skip it
 	auto cListCheck = closedList.find(next.tile->getIndex());
 	if (cListCheck != closedList.end()) return;
 
