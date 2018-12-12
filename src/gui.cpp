@@ -58,6 +58,9 @@ Gui::Gui()
 	view.zoom(0.1);
 	view.setCenter(map.getWidth()/2, map.getHeight()/2);
 	zoom = 0.1;
+
+	// Reset path time
+	pathTime = 0;
 }
 
 bool Gui::update()
@@ -118,6 +121,7 @@ bool Gui::update()
 						else if (mouseMode == gui_SelectDestination)
 						{
 							currentPathfinder->setGoal(map.get(selectedTile.x, selectedTile.y), map.get(mousePos.x, mousePos.y));
+							pathTime = 0;
 							mouseMode = gui_Camera;
 							hasSelection = false;
 						}
@@ -132,7 +136,7 @@ bool Gui::update()
 
 		if (continuousStep)
 		{
-			currentPathfinder->step();
+			pathfindingStep();
 		}
 
 		return true;
@@ -186,6 +190,9 @@ void Gui::render()
 
 	// Setup ImGui Window
 	ImGui::Begin("Hello World!");
+
+	// Display amount of time running current path
+	ImGui::Text("Path Time: %f ms", pathTime/1000);
 
 	// Checkbox to continuously run pathfinding
 	ImGui::Checkbox("Run", &continuousStep);
@@ -280,19 +287,17 @@ void Gui::render()
 
 void Gui::pathfindingStep()
 {
-	// because pathfinding steps often do nothing (ie returning early because the expanded node was in the closed list)
-	// we only draw once we have something new to draw
-	auto closedSize = currentPathfinder->getClosedList().size();
-	auto newClosedSize = closedSize;
-	while (currentPathfinder->getStatus() != FINISHED && closedSize == newClosedSize)
+	if (currentPathfinder->getStatus() == IN_PROGRESS)
 	{
+		stepClock.restart();
 		currentPathfinder->step();
-		newClosedSize = currentPathfinder->getClosedList().size();
+		pathTime += stepClock.getElapsedTime().asMicroseconds();
 	}
 }
 
 void Gui::resetPathfinder()
 {
+	pathTime = 0;
 	uint origin = currentPathfinder->getOrigin();
 	uint destination = currentPathfinder->getDestination();
 

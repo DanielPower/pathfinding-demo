@@ -48,6 +48,8 @@ private:
 	Map map;
 
 	sf::Clock deltaClock;
+	sf::Clock stepClock;
+	float pathTime;
 	bool continuousStep = false;
 	bool showLists = false;
 	bool showGrid = true;
