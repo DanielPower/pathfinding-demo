@@ -2,41 +2,41 @@
 
 Tile::Tile() {};
 
-void Tile::setHeight(float _height) {
-	height = _height;
+void Tile::setSector(float sector) {
+	m_sector = sector;
 }
 
-void Tile::setIndex(uint _index)
+void Tile::setIndex(uint index)
 {
-	index = _index;
+	m_index = index;
 }
 
 void Tile::setTravelCost(float cost)
 {
-	travelCost = cost;
+	m_travelCost = cost;
 }
 
-const float Tile::getHeight() const
+const uint Tile::getSector() const
 {
-	return height;
+	return m_sector;
 }
 
 const uint Tile::getIndex() const
 {
-	return index;
+	return m_index;
 }
 
 const uint Tile::getX(const uint& width) const
 {
-	return index%width;
+	return m_index%width;
 }
 
 const uint Tile::getY(const uint& width) const
 {
-	return index/width;
+	return m_index/width;
 }
 
 const float Tile::getTravelCost() const
 {
-	return travelCost;
+	return m_travelCost;
 }

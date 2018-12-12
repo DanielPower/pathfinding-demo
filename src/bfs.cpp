@@ -5,6 +5,9 @@ void BFS::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destinat
 {
 	origin = _origin->getIndex();
 	destination = _destination->getIndex();
+	status = IN_PROGRESS;
+	openList.clear();
+	closedList.clear();
 	openList.push_back(_origin);
 }
 
@@ -37,7 +40,7 @@ void BFS::step()
 
 	// Add tile to the closed list
 	closedList.insert(next.tile->getIndex());
-	
+
 	auto neighbours = map.getLegalNeighbours(next.tile);
 	for (auto tile : neighbours)
 	{
@@ -64,8 +67,8 @@ tileArray BFS::getClosedList()
 	tileArray out;
 	for (auto n : closedList)
 	{
-		uint x = n % map.width;
-		uint y = n / map.width;
+		uint x = n % map.getWidth();
+		uint y = n / map.getWidth();
 		std::shared_ptr<Tile> t = map.get(x, y);
 		out.push_back(t);
 	}

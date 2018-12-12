@@ -5,7 +5,7 @@ clang++ -o bin/main \
 src/astar.cpp \
 src/bfs.cpp \
 src/gui.cpp \
-src/image.cpp \
+src/mapLoader.cpp \
 src/main.cpp \
 src/map.cpp \
 src/pathfinding.cpp \

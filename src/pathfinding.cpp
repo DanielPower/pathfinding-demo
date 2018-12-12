@@ -7,9 +7,24 @@ Pathfinding::Pathfinding(const Map& map)
 Pathfinding::~Pathfinding()
 {}
 
+PathStatus Pathfinding::getStatus()
+{
+	return status;
+}
+
 tileArray Pathfinding::getPath()
 {
 	return path;
+}
+
+uint Pathfinding::getOrigin()
+{
+	return origin;
+}
+
+uint Pathfinding::getDestination()
+{
+	return destination;
 }
 
 void Pathfinding::makePath(PathNode destination)

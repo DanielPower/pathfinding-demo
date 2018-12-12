@@ -4,7 +4,7 @@
 #include "SFML/Graphics.hpp"
 #include "common.hpp"
 #include "map.h"
-#include "image.h"
+#include "mapLoader.h"
 #include "bfs.h"
 #include "astar.h"
 #include "imgui.h"
@@ -13,6 +13,12 @@
 enum Pathfinders {
 	gui_BFS,
 	gui_AStar
+};
+
+enum MouseMode {
+	gui_Camera,
+	gui_SelectOrigin,
+	gui_SelectDestination
 };
 
 class Gui
@@ -35,28 +41,28 @@ private:
 	sf::Image map_image;
 	sf::Texture map_texture;
 
-	sf::Sprite open_sprite;
-	sf::Image open_image;
-	sf::Texture open_texture;
-
-	sf::Sprite closed_sprite;
-	sf::Image closed_image;
-	sf::Texture closed_texture;
-
-	sf::Sprite path_sprite;
-	sf::Image path_image;
-	sf::Texture path_texture;
+	sf::Sprite overlay_sprite;
+	sf::Image overlay_image;
+	sf::Texture overlay_texture;
 
 	Map map;
 
 	sf::Clock deltaClock;
 	bool continuousStep = false;
+	bool showLists = false;
+	bool showGrid = true;
+	int mouseMode = 0;
+	bool hasSelection;
+	sf::Vector2u selectedTile;
+	sf::Vector2u mousePos;
+
+	void pathfindingStep();
+	void resetPathfinder();
 
 public:
 	Gui();
 	bool update();
 	void render();
-	void pathfindingStep();
 	sf::RenderWindow& getWindow();
 };
 
