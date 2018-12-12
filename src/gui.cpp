@@ -13,6 +13,7 @@ Gui::Gui()
 	};
 
 	// Initialize currentPathfinder as instance of BFS
+	//currentPathfinder = pathfinders[gui_BFS];
 	currentPathfinder = pathfinders[gui_AStar];
 
 	// DEBUG - set start/end until implemented in gui
@@ -229,9 +230,10 @@ void Gui::render()
 		ImGui::BeginChild("List View");
 		ImGui::Columns(2, NULL, false);
 		ImGui::Text("Open Nodes");
-		for (auto tile : currentPathfinder->getOpenList())
+		for (auto node : currentPathfinder->getOpenNodes())
 		{
-			ImGui::Text("x=%d, y=%d", tile->getX(map.getWidth()), tile->getY(map.getWidth()));
+			auto& tile = node->tile;
+			ImGui::Text("x=%d, y=%d, cost:%d", tile->getX(map.getWidth()), tile->getY(map.getWidth()),node->getCost());
 		}
 		ImGui::NextColumn();
 		ImGui::Text("Closed Nodes");

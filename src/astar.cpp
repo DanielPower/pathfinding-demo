@@ -10,36 +10,40 @@ void AStar::step()
 		return;
 	}
 	// Pick the next tile from the open list
-	auto next = openList.top();
+	auto curNode = openList.top();
 	openList.pop();
 
 	// If we've reached the destination, create path
-	if (next->tile->getIndex() == destination)
+	if (curNode->tile->getIndex() == destination)
 	{
-		Pathfinding::makePath(*next); //todo update the method to only take refs
+		Pathfinding::makePath(*curNode); //todo update the method to only take refs
 		status = FINISHED;
 		return;
 	}
 
-	// If tile is in the clost list, skip it
-	auto cListCheck = closedList.find(next->tile->getIndex());
-	if (cListCheck != closedList.end()) return;
-
+	// If tile is in the closed list, skip it
+	auto cListCheck = closedList.find(curNode->tile->getIndex());
+	if (cListCheck != closedList.end())
+	{
+		return;
+	}
 	// Add tile to the closed list
-	uint idx = next->tile->getIndex();
-	uint cost = next->getCost();
+	uint idx = curNode->tile->getIndex();
+	uint cost = curNode->getCost();
 	closedList[idx] = cost;
-
-	auto neighbours = map.getLegalNeighbours(next->tile);
-	for (auto tile : neighbours)
+	// iter neighbours
+	for (auto tile : map.getLegalNeighbours(curNode->tile))
 	{
 		auto n = std::make_shared<AStarNode>(tile);
-		//todo fix heuristic
+		n->parent = curNode;
 		n->hCost = calcHScore(n->tile);
-		n->gCost = (n->parent == nullptr) ? 100 : n->parent->gCost + 100;
+		n->gCost = curNode->gCost + 10;
+		n->gCost = map.isDiagonal(curNode->tile, n->tile)? curNode->gCost + 14 : curNode->gCost + 10;	
 		auto cListCheck = closedList.find(n->tile->getIndex());
-		if (cListCheck != closedList.end()) continue;
-		n->parent = next;
+		if (cListCheck != closedList.end())
+		{
+			if (cListCheck->second > n->getCost())continue;
+		}
 		openList.push(n);
 	}
 }
@@ -60,26 +64,38 @@ tileArray AStar::getClosedList()
 	for (auto pair : closedList)
 	{
 		auto n = pair.first;
-		uint x = n % map.width;
-		uint y = n / map.width;
+		uint x = n % map.getWidth();
+		uint y = n / map.getWidth();
 		std::shared_ptr<Tile> t = map.get(x, y);
 		out.push_back(t);
 	}
 	return out;
 }
 
+std::vector<std::shared_ptr<PathNode>> AStar::getOpenNodes()
+{
+	std::vector<std::shared_ptr<PathNode>> out;
+	for (auto node : openList.get_vec())
+	{
+		out.push_back(node);
+	}
+	return out;
+}
+
+
 void AStar::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination)
 {
 	origin = _origin->getIndex();
 	destination = _destination->getIndex();
 	auto og = std::make_shared<AStarNode>(_origin);
+	og->gCost = 0;
 	openList.push(og);
 }
 
-uint AStar::calcHScore(const std::shared_ptr<Tile> t)
+uint AStar::calcHScore(const std::shared_ptr<Tile>& t)
 {
 	//todo pick between heuristics
-	return uint(euclidean(map, t, map.map[destination]));
+	return uint(euclidean(map, t, map.get(destination)));
 }
 
 

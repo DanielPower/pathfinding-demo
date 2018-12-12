@@ -24,6 +24,7 @@ public:
 	const bool isOOB(uint x, uint y) const;
 	const uint getWidth() const;
 	const uint getHeight() const;
+	bool isDiagonal(std::shared_ptr<Tile> t1, std::shared_ptr<Tile> t2) const;
 private:
 	std::vector<Tile> map;
 	uint width;

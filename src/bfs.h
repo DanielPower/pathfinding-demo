@@ -19,4 +19,5 @@ public:
 	void step() override;
 	tileArray getOpenList() override;
 	tileArray getClosedList() override;
+	std::vector<std::shared_ptr<PathNode>> getOpenNodes() override;
 };

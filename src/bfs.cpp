@@ -74,3 +74,13 @@ tileArray BFS::getClosedList()
 	}
 	return out;
 }
+
+std::vector<std::shared_ptr<PathNode>> BFS::getOpenNodes()
+{
+	std::vector<std::shared_ptr<PathNode>> out;
+	for (auto node : openList)
+	{
+		out.push_back(std::make_shared<PathNode>(node));
+	}
+	return out;
+}

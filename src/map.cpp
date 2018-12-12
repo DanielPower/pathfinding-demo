@@ -91,3 +91,10 @@ const uint Map::getHeight() const
 {
 	return height;
 }
+
+bool Map::isDiagonal(std::shared_ptr<Tile> t1, std::shared_ptr<Tile> t2) const
+{
+	auto dx = labs(t1->getX(width) - t2->getX(width));
+	auto dy = labs(t1->getY(width) - t2->getY(width));
+	return (dx + dy) > 1;
+}
