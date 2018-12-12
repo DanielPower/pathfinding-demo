@@ -105,7 +105,6 @@ bool Gui::update()
 			{
 				switch (event.key.code)
 				{
-				case(sf::Keyboard::Space): { pathfindingStep(); break; }
 				case(sf::Keyboard::Escape): { window.close(); break; }
 				default: { break; }
 				}
@@ -118,7 +117,7 @@ bool Gui::update()
 
 		if (continuousStep)
 		{
-			pathfindingStep();
+			currentPathfinder->step();
 		}
 
 		return true;
@@ -128,30 +127,69 @@ bool Gui::update()
 
 void Gui::render()
 {
+	// Clear open and closed images
+	open_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
+	closed_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
+
+	// Add yellow pixel to open_image for each open tile
+	for (auto tile : currentPathfinder->getOpenList())
+	{
+		open_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 255, 0));
+	}
+
+	// Add red pixel to closed_image for each closed tile
+	for (auto tile : currentPathfinder->getClosedList())
+	{
+		closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 0));
+	}
+
+	// Add purple pixels to path if the pathfinding is finished
+	if (currentPathfinder->status == FINISHED)
+	{
+		for (auto tile : currentPathfinder->getPath())
+		{
+			closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 255));
+		}
+	}
+
+	open_texture.loadFromImage(open_image);
+	open_sprite.setTexture(open_texture);
+
+	closed_texture.loadFromImage(closed_image);
+	closed_sprite.setTexture(closed_texture);
+
+	path_texture.loadFromImage(path_image);
+	path_sprite.setTexture(path_texture);
+
 	// Update ImGui
 	ImGui::SFML::Update(window, deltaClock.restart());
 
 	// Setup ImGui Window
 	ImGui::Begin("Hello World!");
-	ImGui::SameLine();
+
+	// Checkbox to continuously run pathfinding
 	ImGui::Checkbox("Run", &continuousStep);
+
+	// Button to run a single step of pathfinding
 	if (ImGui::Button("Step"))
 	{
 		pathfindingStep();
 	}
+
+	// Container for open/closed lists
 	ImGui::BeginChild("List View");
-	ImGui::Columns(2, NULL, false);
-	ImGui::Text("Open Nodes");
-	for (auto tile : currentPathfinder->getOpenList())
-	{
-		ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
-	}
-	ImGui::NextColumn();
-	ImGui::Text("Closed Nodes");
-	for (auto tile : currentPathfinder->getClosedList())
-	{
-		ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
-	}
+		ImGui::Columns(2, NULL, false);
+		ImGui::Text("Open Nodes");
+		for (auto tile : currentPathfinder->getOpenList())
+		{
+			ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
+		}
+		ImGui::NextColumn();
+		ImGui::Text("Closed Nodes");
+		for (auto tile : currentPathfinder->getClosedList())
+		{
+			ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
+		}
 	ImGui::EndChild();
 	ImGui::End();
 
@@ -215,41 +253,6 @@ void Gui::pathfindingStep()
 		currentPathfinder->step();
 		newClosedSize = currentPathfinder->getClosedList().size();
 	}
-
-	// Clear open and closed images
-	open_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
-	closed_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
-
-	// Add yellow pixel to open_image for each open tile
-	for (auto tile : currentPathfinder->getOpenList())
-	{
-		open_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 255, 0));
-	}
-
-	// Add green pixel to closed_image for each closed tile
-	for (auto tile : currentPathfinder->getClosedList())
-	{
-		closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 0));
-	}
-
-	//Add purple pixels to path if the pathfinding is finished
-	//if (currentPathfinder->status == FINISHED)
-	{
-		for (auto tile : currentPathfinder->getPath())
-		{
-			closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 255));
-		}
-	}
-
-	open_texture.loadFromImage(open_image);
-	open_sprite.setTexture(open_texture);
-
-	closed_texture.loadFromImage(closed_image);
-	closed_sprite.setTexture(closed_texture);
-
-	path_texture.loadFromImage(path_image);
-	path_sprite.setTexture(path_texture);
-
 }
 
 sf::RenderWindow& Gui::getWindow()
