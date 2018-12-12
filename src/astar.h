@@ -23,7 +23,7 @@ class AStar : public Pathfinding
 {
 public:
 	//std::priority_queue<PathNode> openList;
-	pQueue<AStarNode> openList;
+	pQueue<std::shared_ptr<AStarNode>> openList;
 	std::unordered_map<uint, uint> closedList; //tile.index -> gCost
 	AStar(const Map& map)
 		: Pathfinding(map)

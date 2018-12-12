@@ -8,7 +8,7 @@
 class Map
 {
 public:
-	enum LegalActions{
+	enum LegalActions {
 		CARDINAL,
 		DIAGONAL
 	};

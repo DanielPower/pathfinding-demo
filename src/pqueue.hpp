@@ -10,5 +10,5 @@ using namespace std;
 template<class T>
 class pQueue : public priority_queue<T, std::vector<T>, std::greater<T>> {
 public:
-	vector<int>& get_vec() { return c; }
+	vector<T>& get_vec() { return c; }
 };
