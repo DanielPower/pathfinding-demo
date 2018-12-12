@@ -11,23 +11,33 @@ void BFS::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destinat
 void BFS::step()
 {
 	if (status == FINISHED || status == FAILED) return;
+
+	// Open List empty, search has failed
 	if (openList.empty())
 	{
 		status = FAILED;
 		return;
 	}
+
+	// Pick the next tile from the open list
 	auto next = openList.front();
 	openList.pop_front();
 
+	// If we've reached the destination, create path
 	if (next.tile->getIndex() == destination)
 	{
 		Pathfinding::makePath(next);
 		status = FINISHED;
 		return;
 	}
+
+	// If tile is in the clost list, skip it
 	auto cListCheck = closedList.find(next.tile->getIndex());
-	if (cListCheck != closedList.end()) return; //item is already in closed list
+	if (cListCheck != closedList.end()) return;
+
+	// Add tile to the closed list
 	closedList.insert(next.tile->getIndex());
+	
 	auto neighbours = map.getLegalNeighbours(next.tile);
 	for (auto tile : neighbours)
 	{
