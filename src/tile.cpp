@@ -11,11 +11,6 @@ void Tile::setIndex(uint index)
 	m_index = index;
 }
 
-void Tile::setTravelCost(float cost)
-{
-	m_travelCost = cost;
-}
-
 const uint Tile::getSector() const
 {
 	return m_sector;
@@ -34,9 +29,4 @@ const uint Tile::getX(const uint& width) const
 const uint Tile::getY(const uint& width) const
 {
 	return m_index/width;
-}
-
-const float Tile::getTravelCost() const
-{
-	return m_travelCost;
 }
