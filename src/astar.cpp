@@ -26,7 +26,9 @@ void AStar::step()
 	if (cListCheck != closedList.end()) return;
 
 	// Add tile to the closed list
-	closedList.insert(next->tile->getIndex(), next->getCost());
+	uint idx = next->tile->getIndex();
+	uint cost = next->getCost();
+	closedList[idx] = cost;
 
 	auto neighbours = map.getLegalNeighbours(next->tile);
 	for (auto tile : neighbours)
@@ -51,7 +53,16 @@ tileArray AStar::getOpenList()
 
 tileArray AStar::getClosedList()
 {
-	return tileArray();
+	tileArray out;
+	for (auto pair : closedList)
+	{
+		auto n = pair.first;
+		uint x = n % map.width;
+		uint y = n / map.width;
+		std::shared_ptr<Tile> t = map.get(x, y);
+		out.push_back(t);
+	}
+	return out;
 }
 
 void AStar::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination)

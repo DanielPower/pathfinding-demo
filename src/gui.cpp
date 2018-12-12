@@ -13,7 +13,7 @@ Gui::Gui()
 	};
 
 	// Initialize currentPathfinder as instance of BFS
-	currentPathfinder = pathfinders[gui_BFS];
+	currentPathfinder = pathfinders[gui_AStar];
 
 	// DEBUG - set start/end until implemented in gui
 	auto start = map.get(5, 5);
