@@ -1,7 +1,7 @@
 #include "gui.h"
 
 Gui::Gui()
-	: map(Image::load("map.bmp"))
+: map(MapLoader::fromText("default.txt"))
 {
 	// Create window
 	window.create(sf::VideoMode(1280, 720), "COMP 3200");
@@ -16,33 +16,31 @@ Gui::Gui()
 	currentPathfinder = pathfinders[gui_AStar];
 
 	// DEBUG - set start/end until implemented in gui
-	auto start = map.get(5, 5);
-	auto end = map.get(200, 200);
+	auto start = map.get(62, 3);
+	auto end = map.get(60, 47);
 	currentPathfinder->setGoal(start, end);
 
 	// Create blank images
-	map_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
-	open_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
-	closed_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
-	path_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
+	map_image.create(map.getWidth(), map.getHeight(), sf::Color(0, 0, 0, 0));
+	overlay_image.create(map.getWidth(), map.getHeight(), sf::Color(0, 0, 0, 0));
 
 	// Fill map_image with data from map
-	for (uint x = 0; x < map.width; x++)
+	for (uint x = 0; x < map.getWidth(); x++)
 	{
-		for (uint y = 0; y < map.height; y++)
+		for (uint y = 0; y < map.getHeight(); y++)
 		{
 			Tile tile = *map.get(x, y);
-			if (tile.getHeight() < 0.3)
+			if (tile.getSector() == 2)
 			{
-				map_image.setPixel(x, y, sf::Color(0, 0, 128));
+				map_image.setPixel(x, y, sf::Color(0, 66, 255));
 			}
-			else if (tile.getHeight() > 0.7)
+			else if (tile.getSector() == 1)
 			{
-				map_image.setPixel(x, y, sf::Color(128, 128, 128));
+				map_image.setPixel(x, y, sf::Color(0, 255, 0));
 			}
-			else
+			else if (tile.getSector() == 0)
 			{
-				map_image.setPixel(x, y, sf::Color(0, 128, 0));
+				map_image.setPixel(x, y, sf::Color(88, 88, 88));
 			}
 		}
 	}
@@ -52,20 +50,17 @@ Gui::Gui()
 	map_sprite.setTexture(map_texture);
 
 	// Create blank open sprite
-	open_texture.loadFromImage(open_image);
-	open_sprite.setTexture(open_texture);
-
-	// Create blank closed sprite
-	closed_texture.loadFromImage(closed_image);
-	closed_sprite.setTexture(closed_texture);
-
-	// Create blank path sprite
-	path_texture.loadFromImage(path_image);
-	path_sprite.setTexture(path_texture);
+	overlay_texture.loadFromImage(overlay_image);
+	overlay_sprite.setTexture(overlay_texture);
 
 	// Set initial view
 	view.reset(sf::FloatRect(0.f, 0.f, 1280, 720));
-	zoom = 1;
+	view.zoom(0.1);
+	view.setCenter(map.getWidth()/2, map.getHeight()/2);
+	zoom = 0.1;
+
+	// Reset path time
+	pathTime = 0;
 }
 
 bool Gui::update()
@@ -74,6 +69,8 @@ bool Gui::update()
 	{
 		deltaMouseX = 0;
 		deltaMouseY = 0;
+
+		mousePos = (sf::Vector2u)window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
 		// Events
 		sf::Event event;
@@ -109,6 +106,28 @@ bool Gui::update()
 				default: { break; }
 				}
 			}
+			else if (event.type == sf::Event::MouseButtonPressed)
+			{
+				if (event.mouseButton.button == sf::Mouse::Left)
+				{
+					if (mousePos.x <= map.getWidth() && mousePos.y <= map.getHeight())
+					{
+						if (mouseMode == gui_SelectOrigin)
+						{
+							selectedTile = mousePos;
+							hasSelection = true;
+							mouseMode = gui_SelectDestination;
+						}
+						else if (mouseMode == gui_SelectDestination)
+						{
+							currentPathfinder->setGoal(map.get(selectedTile.x, selectedTile.y), map.get(mousePos.x, mousePos.y));
+							pathTime = 0;
+							mouseMode = gui_Camera;
+							hasSelection = false;
+						}
+					}
+				}
+			}
 		}
 
 		if (!ImGui::GetIO().WantCaptureMouse && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -117,7 +136,7 @@ bool Gui::update()
 
 		if (continuousStep)
 		{
-			currentPathfinder->step();
+			pathfindingStep();
 		}
 
 		return true;
@@ -128,38 +147,43 @@ bool Gui::update()
 void Gui::render()
 {
 	// Clear open and closed images
-	open_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
-	closed_image.create(map.width, map.height, sf::Color(0, 0, 0, 0));
+	overlay_image.create(map.getWidth(), map.getHeight(), sf::Color(0, 0, 0, 0));
 
-	// Add yellow pixel to open_image for each open tile
+	// Add yellow pixel to overlay_image for each open tile
 	for (auto tile : currentPathfinder->getOpenList())
 	{
-		open_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 255, 0));
+		overlay_image.setPixel(tile->getX(map.getWidth()), tile->getY(map.getWidth()), sf::Color(255, 255, 0));
 	}
 
 	// Add red pixel to closed_image for each closed tile
 	for (auto tile : currentPathfinder->getClosedList())
 	{
-		closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 0));
+		overlay_image.setPixel(tile->getX(map.getWidth()), tile->getY(map.getWidth()), sf::Color(255, 0, 0));
 	}
 
 	// Add purple pixels to path if the pathfinding is finished
-	if (currentPathfinder->status == FINISHED)
+	if (currentPathfinder->getStatus() == FINISHED)
 	{
 		for (auto tile : currentPathfinder->getPath())
 		{
-			closed_image.setPixel(tile->getX(map.width), tile->getY(map.width), sf::Color(255, 0, 255));
+			overlay_image.setPixel(tile->getX(map.getWidth()), tile->getY(map.getWidth()), sf::Color(255, 0, 255));
 		}
 	}
 
-	open_texture.loadFromImage(open_image);
-	open_sprite.setTexture(open_texture);
+	// Draw selected tile as white
+	if (hasSelection)
+	{
+		overlay_image.setPixel(selectedTile.x, selectedTile.y, sf::Color::White);
+	}
 
-	closed_texture.loadFromImage(closed_image);
-	closed_sprite.setTexture(closed_texture);
+	// Draw hovered tile as white
+	if (mousePos.x < map.getWidth() && mousePos.y < map.getHeight())
+	{
+		overlay_image.setPixel(mousePos.x, mousePos.y, sf::Color::White);
+	}
 
-	path_texture.loadFromImage(path_image);
-	path_sprite.setTexture(path_texture);
+	overlay_texture.loadFromImage(overlay_image);
+	overlay_sprite.setTexture(overlay_texture);
 
 	// Update ImGui
 	ImGui::SFML::Update(window, deltaClock.restart());
@@ -167,30 +191,56 @@ void Gui::render()
 	// Setup ImGui Window
 	ImGui::Begin("Hello World!");
 
+	// Display amount of time running current path
+	ImGui::Text("Path Time: %f ms", pathTime/1000);
+
 	// Checkbox to continuously run pathfinding
 	ImGui::Checkbox("Run", &continuousStep);
 
 	// Button to run a single step of pathfinding
+	ImGui::SameLine();
 	if (ImGui::Button("Step"))
 	{
 		pathfindingStep();
 	}
 
+	// Button to restart current path
+	ImGui::SameLine();
+	if (ImGui::Button("Reset"))
+	{
+		resetPathfinder();
+	}
+
+	// Button to set new path
+	ImGui::SameLine();
+	if (ImGui::Button("Set Path"))
+	{
+		mouseMode = gui_SelectOrigin;
+	}
+
+	// Checkbox to enable/disable the grid
+	ImGui::Checkbox("Show Grid", &showGrid);
+
 	// Container for open/closed lists
-	ImGui::BeginChild("List View");
+	ImGui::Checkbox("Show Open/Closed Lists", &showLists);
+
+	if (showLists)
+	{
+		ImGui::BeginChild("List View");
 		ImGui::Columns(2, NULL, false);
 		ImGui::Text("Open Nodes");
 		for (auto tile : currentPathfinder->getOpenList())
 		{
-			ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
+			ImGui::Text("x=%d, y=%d", tile->getX(map.getWidth()), tile->getY(map.getWidth()));
 		}
 		ImGui::NextColumn();
 		ImGui::Text("Closed Nodes");
 		for (auto tile : currentPathfinder->getClosedList())
 		{
-			ImGui::Text("x=%d, y=%d", tile->getX(map.width), tile->getY(map.width));
+			ImGui::Text("x=%d, y=%d", tile->getX(map.getWidth()), tile->getY(map.getWidth()));
 		}
-	ImGui::EndChild();
+		ImGui::EndChild();
+	}
 	ImGui::End();
 
 	// Rendering
@@ -199,37 +249,30 @@ void Gui::render()
 
 	// Draw map and highlight open/closed nodes
 	window.draw(map_sprite);
-	window.draw(open_sprite);
-	window.draw(closed_sprite);
-	window.draw(path_sprite);
+	window.draw(overlay_sprite);
 
 	// Draw grid lines
-	if (zoom < 0.2f)
+	if (showGrid)
 	{
-		sf::Vector2f size = view.getSize();
-		sf::Vector2f position = view.getCenter();
-		float left = position.x - size.x / 2.f;
-		float top = position.y - size.y / 2.f;
-
 		// Vertical lines
-		for (uint x = 0; x <= floor(size.x / zoom); x++)
+		for (uint x = 0; x <= map.getWidth(); x++)
 		{
 			sf::Vertex x_line[] =
 			{
-				sf::Vertex(sf::Vector2f((int)left + (int)x - 1, top)),
-				sf::Vertex(sf::Vector2f((int)left + (int)x - 1, top + size.y))
+				sf::Vertex(sf::Vector2f(x, 0), sf::Color::Black),
+				sf::Vertex(sf::Vector2f(x, map.getHeight()), sf::Color::Black)
 			};
 
 			window.draw(x_line, 2, sf::Lines);
 		}
 
 		// Horizontal lines
-		for (uint y = 0; y <= floor(size.y / zoom); y++)
+		for (uint y = 0; y <= map.getHeight(); y++)
 		{
 			sf::Vertex y_line[] =
 			{
-				sf::Vertex(sf::Vector2f(left, (int)top + (int)y - 1)),
-				sf::Vertex(sf::Vector2f(left + size.x, (int)top + (int)y - 1))
+				sf::Vertex(sf::Vector2f(0, y), sf::Color::Black),
+				sf::Vertex(sf::Vector2f(map.getWidth(), y), sf::Color::Black)
 			};
 
 			window.draw(y_line, 2, sf::Lines);
@@ -244,15 +287,21 @@ void Gui::render()
 
 void Gui::pathfindingStep()
 {
-	// because pathfinding steps often do nothing (ie returning early because the expanded node was in the closed list)
-	// we only draw once we have something new to draw
-	auto closedSize = currentPathfinder->getClosedList().size();
-	auto newClosedSize = closedSize;
-	while (currentPathfinder->status !=FINISHED && closedSize == newClosedSize)
+	if (currentPathfinder->getStatus() == IN_PROGRESS)
 	{
+		stepClock.restart();
 		currentPathfinder->step();
-		newClosedSize = currentPathfinder->getClosedList().size();
+		pathTime += stepClock.getElapsedTime().asMicroseconds();
 	}
+}
+
+void Gui::resetPathfinder()
+{
+	pathTime = 0;
+	uint origin = currentPathfinder->getOrigin();
+	uint destination = currentPathfinder->getDestination();
+
+	currentPathfinder->setGoal(map.get(origin), map.get(destination));
 }
 
 sf::RenderWindow& Gui::getWindow()

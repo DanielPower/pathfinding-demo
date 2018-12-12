@@ -1,0 +1,4 @@
+- Do tiles need a travelCost? If JPS+ only works on uniform-cost maps, they do not.
+- We should use m_ syntax for member variables. Low priority.
+- Image module should be renamed, since it no longer loads from just images
+- Refactor gui init so that map can be changed during runtime

@@ -1,8 +1,5 @@
 #include "common.hpp"
 #include "gui.h"
-#include "image.h"
-#include "astar.h"
-#include "bfs.h"
 
 Gui gui;
 

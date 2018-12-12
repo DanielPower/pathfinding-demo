@@ -6,9 +6,10 @@
 #include "map.h"
 #include "common.hpp"
 
-namespace Image
+namespace MapLoader
 {
-	Map load(std::string filename);
+	Map fromImage(std::string filename);
+	Map fromText(std::string filename);
 	void save(sf::Image, std::string filename);
 };
 

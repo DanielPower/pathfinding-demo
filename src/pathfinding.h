@@ -29,11 +29,6 @@ struct PathNode
 class Pathfinding
 {
 public:
-	const Map& map;
-	uint origin;
-	uint destination;
-	PathStatus status = IN_PROGRESS;
-
 	explicit Pathfinding(const Map& map);
 	virtual ~Pathfinding();
 
@@ -41,11 +36,19 @@ public:
 	virtual void step() = 0;
 	virtual tileArray getOpenList() = 0;
 	virtual tileArray getClosedList() = 0;
+	PathStatus getStatus();
 	tileArray getPath();
+	uint getOrigin();
+	uint getDestination();
 
 protected:
-	void makePath(PathNode destination);
+	const Map& map;
+	PathStatus status = IN_PROGRESS;
 	tileArray path;
+	uint origin;
+	uint destination;
+
+	void makePath(PathNode destination);
 };
 
 #endif
