@@ -7,6 +7,7 @@
 #include <queue>
 #include <unordered_map>
 #include "pqueue.hpp"
+#include "heuristics.hpp"
 
 
 struct AStarNode : PathNode
@@ -33,6 +34,10 @@ public:
 	tileArray getOpenList() override;
 	tileArray getClosedList() override;
 	void setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination) override;
+	Heuristic heuristic = EUCLIDEAN;
+private:
+	uint calcHScore(const std::shared_ptr<Tile> t);
+
 };
 
 

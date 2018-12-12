@@ -34,6 +34,9 @@ void AStar::step()
 	for (auto tile : neighbours)
 	{
 		auto n = std::make_shared<AStarNode>(tile);
+		//todo fix heuristic
+		n->hCost = calcHScore(n->tile);
+		n->gCost = (n->parent == nullptr) ? 100 : n->parent->gCost + 100;
 		auto cListCheck = closedList.find(n->tile->getIndex());
 		if (cListCheck != closedList.end()) continue;
 		n->parent = next;
@@ -72,4 +75,11 @@ void AStar::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destin
 	auto og = std::make_shared<AStarNode>(_origin);
 	openList.push(og);
 }
+
+uint AStar::calcHScore(const std::shared_ptr<Tile> t)
+{
+	//todo pick between heuristics
+	return uint(euclidean(map, t, map.map[destination]));
+}
+
 
