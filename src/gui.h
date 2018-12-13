@@ -28,6 +28,7 @@ private:
 	std::shared_ptr<Pathfinding> bfs;
 	std::shared_ptr<Pathfinding> astar;
 	std::shared_ptr<Pathfinding> currentPathfinder;
+	int selectedPathfinder;
 
 	sf::RenderWindow window;
 	sf::View view;
@@ -55,7 +56,8 @@ private:
 	bool showGrid = true;
 	int mouseMode = 0;
 	bool hasSelection;
-	sf::Vector2u selectedTile;
+	sf::Vector2i origin;
+	sf::Vector2i destination;
 	sf::Vector2u mousePos;
 
 	void pathfindingStep();

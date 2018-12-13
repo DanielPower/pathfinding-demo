@@ -13,13 +13,16 @@ Gui::Gui()
 	};
 
 	// Initialize currentPathfinder as instance of BFS
-	//currentPathfinder = pathfinders[gui_BFS];
-	currentPathfinder = pathfinders[gui_AStar];
+	currentPathfinder = pathfinders[gui_BFS];
 
 	// DEBUG - set start/end until implemented in gui
 	auto start = map.get(62, 3);
 	auto end = map.get(60, 47);
-	currentPathfinder->setGoal(start, end);
+	origin.x = 62;
+	origin.y = 3;
+	destination.x = 60;
+	destination.y = 47;
+	resetPathfinder();
 
 	// Create blank images
 	map_image.create(map.getWidth(), map.getHeight(), sf::Color(0, 0, 0, 0));
@@ -115,14 +118,14 @@ bool Gui::update()
 					{
 						if (mouseMode == gui_SelectOrigin)
 						{
-							selectedTile = mousePos;
+							origin = (sf::Vector2i)mousePos;
 							hasSelection = true;
 							mouseMode = gui_SelectDestination;
 						}
 						else if (mouseMode == gui_SelectDestination)
 						{
-							currentPathfinder->setGoal(map.get(selectedTile.x, selectedTile.y), map.get(mousePos.x, mousePos.y));
-							pathTime = 0;
+							destination = (sf::Vector2i)mousePos;
+							resetPathfinder();
 							mouseMode = gui_Camera;
 							hasSelection = false;
 						}
@@ -172,10 +175,8 @@ void Gui::render()
 	}
 
 	// Draw selected tile as white
-	if (hasSelection)
-	{
-		overlay_image.setPixel(selectedTile.x, selectedTile.y, sf::Color::White);
-	}
+	overlay_image.setPixel(origin.x, origin.y, sf::Color::White);
+	overlay_image.setPixel(destination.x, destination.y, sf::Color::White);
 
 	// Draw hovered tile as white
 	if (mousePos.x < map.getWidth() && mousePos.y < map.getHeight())
@@ -217,6 +218,14 @@ void Gui::render()
 	if (ImGui::Button("Set Path"))
 	{
 		mouseMode = gui_SelectOrigin;
+	}
+
+	// Select patfhinder
+	const char* pathfinderNames[] = {"BFS", "Astar"};
+	if (ImGui::ListBox("Algorithm", &selectedPathfinder, pathfinderNames, IM_ARRAYSIZE(pathfinderNames), 2))
+	{
+		currentPathfinder = pathfinders[selectedPathfinder];
+		resetPathfinder();
 	}
 
 	// Checkbox to enable/disable the grid
@@ -300,10 +309,8 @@ void Gui::pathfindingStep()
 void Gui::resetPathfinder()
 {
 	pathTime = 0;
-	uint origin = currentPathfinder->getOrigin();
-	uint destination = currentPathfinder->getDestination();
 
-	currentPathfinder->setGoal(map.get(origin), map.get(destination));
+	currentPathfinder->setGoal(map.get(origin.x, origin.y), map.get(destination.x, destination.y));
 }
 
 sf::RenderWindow& Gui::getWindow()
