@@ -1,14 +1,30 @@
 #include "astar.h"
 
+
+void AStar::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination)
+{
+	origin = _origin->getIndex();
+	destination = _destination->getIndex();
+	status = IN_PROGRESS;
+	openList.get_vec().clear();
+	closedList.clear();
+
+	auto og = std::make_shared<AStarNode>(_origin);
+	og->gCost = 0;
+	openList.push(og);
+}
+
 void AStar::step()
 {
 	if (status == FINISHED || status == FAILED) return;
+
 	// Open List empty, search has failed
 	if (openList.empty())
 	{
 		status = FAILED;
 		return;
 	}
+
 	// Pick the next tile from the open list
 	auto curNode = openList.top();
 	openList.pop();
@@ -27,6 +43,7 @@ void AStar::step()
 	{
 		return;
 	}
+
 	// Add tile to the closed list
 	uint idx = curNode->tile->getIndex();
 	uint cost = curNode->getCost();
@@ -38,7 +55,7 @@ void AStar::step()
 		n->parent = curNode;
 		n->hCost = calcHScore(n->tile);
 		n->gCost = curNode->gCost + 10;
-		n->gCost = map.isDiagonal(curNode->tile, n->tile)? curNode->gCost + 14 : curNode->gCost + 10;	
+		n->gCost = map.isDiagonal(curNode->tile, n->tile)? curNode->gCost + 14 : curNode->gCost + 10;
 		auto cListCheck = closedList.find(n->tile->getIndex());
 		if (cListCheck != closedList.end())
 		{
@@ -82,20 +99,8 @@ std::vector<std::shared_ptr<PathNode>> AStar::getOpenNodes()
 	return out;
 }
 
-
-void AStar::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination)
-{
-	origin = _origin->getIndex();
-	destination = _destination->getIndex();
-	auto og = std::make_shared<AStarNode>(_origin);
-	og->gCost = 0;
-	openList.push(og);
-}
-
 uint AStar::calcHScore(const std::shared_ptr<Tile>& t)
 {
 	//todo pick between heuristics
 	return uint(euclidean(map, t, map.get(destination)));
 }
-
-

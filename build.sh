@@ -1,5 +1,5 @@
 rm bin/main
-clang++ -o bin/main \
+clang++ -O3 -o bin/main \
 -Wall \
 -I./include \
 src/astar.cpp \
