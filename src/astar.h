@@ -12,7 +12,6 @@
 //Pathnodes for A* make use of two values for their cost fxn
 struct AStarNode : PathNode
 {
-	uint gCost = 0;
 	uint hCost = 0;
 	explicit AStarNode(const std::shared_ptr<Tile>& t)
 		: PathNode(t)
