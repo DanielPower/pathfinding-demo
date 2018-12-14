@@ -1,13 +1,12 @@
-#include "astar.h"
+#include "jps.h"
 
 
-void AStar::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination)
+void JPS::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination)
 {
 	origin = _origin->getIndex();
 	destination = _destination->getIndex();
 	status = IN_PROGRESS;
 	openList.get_vec().clear();
-	openLookup = std::vector<uint>(map.getWidth()*map.getHeight(), UINT_MAX);
 	closedList.clear();
 
 	auto og = std::make_shared<AStarNode>(_origin);
@@ -15,7 +14,7 @@ void AStar::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destin
 	openList.push(og);
 }
 
-void AStar::step()
+void JPS::step()
 {
 	if (status == FINISHED || status == FAILED) return;
 
@@ -55,16 +54,18 @@ void AStar::step()
 		auto n = std::make_shared<AStarNode>(tile);
 		n->parent = curNode;
 		n->hCost = calcHScore(n->tile);
-		n->gCost = map.isDiagonal(curNode->tile, n->tile) ? curNode->gCost + 14 : curNode->gCost + 10;
-		if (n->gCost < openLookup[n->tile->getIndex()])
+		n->gCost = curNode->gCost + 10;
+		n->gCost = map.isDiagonal(curNode->tile, n->tile)? curNode->gCost + 14 : curNode->gCost + 10;
+		auto cListCheck = closedList.find(n->tile->getIndex());
+		if (cListCheck != closedList.end())
 		{
-			openLookup[n->tile->getIndex()] = n->gCost;
-			openList.push(n);
+			if (cListCheck->second > n->getCost())continue;
 		}
+		openList.push(n);
 	}
 }
 
-tileArray AStar::getOpenList()
+tileArray JPS::getOpenList()
 {
 	tileArray out;
 	for (auto n : openList.get_vec())
@@ -74,7 +75,7 @@ tileArray AStar::getOpenList()
 	return out;
 }
 
-tileArray AStar::getClosedList()
+tileArray JPS::getClosedList()
 {
 	tileArray out;
 	for (auto pair : closedList)
@@ -88,7 +89,7 @@ tileArray AStar::getClosedList()
 	return out;
 }
 
-std::vector<std::shared_ptr<PathNode>> AStar::getOpenNodes()
+std::vector<std::shared_ptr<PathNode>> JPS::getOpenNodes()
 {
 	std::vector<std::shared_ptr<PathNode>> out;
 	for (auto node : openList.get_vec())
@@ -98,7 +99,7 @@ std::vector<std::shared_ptr<PathNode>> AStar::getOpenNodes()
 	return out;
 }
 
-float AStar::calcHScore(const std::shared_ptr<Tile>& t)
+float JPS::calcHScore(const std::shared_ptr<Tile>& t)
 {
 	//todo pick between heuristics
 	return euclidean(map, t, map.get(destination));

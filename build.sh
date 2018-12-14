@@ -5,6 +5,7 @@ clang++ -O3 -o bin/main \
 src/astar.cpp \
 src/bfs.cpp \
 src/gui.cpp \
+src/jps.cpp \
 src/mapLoader.cpp \
 src/main.cpp \
 src/map.cpp \

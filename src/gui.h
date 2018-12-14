@@ -7,12 +7,14 @@
 #include "mapLoader.h"
 #include "bfs.h"
 #include "astar.h"
+#include "jps.h"
 #include "imgui.h"
 #include "imgui-SFML.h"
 
 enum Pathfinders {
 	gui_BFS,
-	gui_AStar
+	gui_AStar,
+	gui_JPS
 };
 
 enum MouseMode {

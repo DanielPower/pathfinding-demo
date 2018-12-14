@@ -43,11 +43,12 @@ class AStar : public Pathfinding
 {
 public:
 	aStarQueue openList;
+	std::vector<uint> openLookup;
 	std::unordered_map<uint, uint> closedList; //tile.index -> cost
 	AStar(const Map& map)
 		: Pathfinding(map)
-	{
-	}
+		, openLookup(map.getWidth()*map.getHeight(), UINT_MAX)
+		{}
 	void step() override;
 	tileArray getOpenList() override;
 	tileArray getClosedList() override;
@@ -55,7 +56,7 @@ public:
 	void setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination) override;
 	Heuristic heuristic = EUCLIDEAN;
 private:
-	uint calcHScore(const std::shared_ptr<Tile>& t);
+	float calcHScore(const std::shared_ptr<Tile>& t);
 };
 
 #endif

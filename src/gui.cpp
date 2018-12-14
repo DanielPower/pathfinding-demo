@@ -9,7 +9,8 @@ Gui::Gui()
 	// Setup vector of pathfinders
 	pathfinders = {
 		std::make_shared<BFS>(map),
-		std::make_shared<AStar>(map)
+		std::make_shared<AStar>(map),
+		std::make_shared<JPS>(map),
 	};
 
 	// Initialize currentPathfinder as instance of BFS
@@ -221,8 +222,8 @@ void Gui::render()
 	}
 
 	// Select patfhinder
-	const char* pathfinderNames[] = {"BFS", "Astar"};
-	if (ImGui::ListBox("Algorithm", &selectedPathfinder, pathfinderNames, IM_ARRAYSIZE(pathfinderNames), 2))
+	const char* pathfinderNames[] = {"BFS", "Astar", "JPS"};
+	if (ImGui::ListBox("Algorithm", &selectedPathfinder, pathfinderNames, IM_ARRAYSIZE(pathfinderNames), 3))
 	{
 		currentPathfinder = pathfinders[selectedPathfinder];
 		resetPathfinder();
