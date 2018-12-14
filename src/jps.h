@@ -24,8 +24,9 @@ public:
 	void step() override;
 	tileArray getOpenList() override;
 	tileArray getClosedList() override;
-	void cardinalScan(std::shared_ptr<AStarNode> node, int dx, int dy);
-	void diagScan(std::shared_ptr<AStarNode> node, int dx, int dy);
+	aStarQueue cardinalScan(std::shared_ptr<AStarNode> node, int dx, int dy);
+	aStarQueue hScan(std::shared_ptr<AStarNode> node, int dx);
+	aStarQueue diagScan(std::shared_ptr<AStarNode> node, int dx, int dy);
 	std::vector<std::shared_ptr<PathNode>> getOpenNodes() override;
 	void setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destination) override;
 	Heuristic heuristic = EUCLIDEAN;
