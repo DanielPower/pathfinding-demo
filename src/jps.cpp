@@ -115,7 +115,7 @@ void JPS::cardinalScan(std::shared_ptr<AStarNode> node, int dx, int dy)
 		auto oy = curTile->getY(map.getWidth());
 		//node we're advancing to with the scan
 		auto nextX = ox + dx;
-		auto nextY = oy + dx;
+		auto nextY = oy + dy;
 		//check termination conditions before calculating jps stuff
 		if (map.isOOB(nextX, nextY) || sector != map.get(nextX, nextY)->getSector()) return;
 		if (curTile->getIndex() == destination)
@@ -135,12 +135,17 @@ void JPS::cardinalScan(std::shared_ptr<AStarNode> node, int dx, int dy)
 		auto adjNextY1 = nextY + dx;
 		auto adjNextX2 = nextX + -dy;
 		auto adjNextY2 = nextY + -dx;
-		cost += DELTA_COST; //cost of 
+		cost += DELTA_COST;
+		auto nextNode = std::make_shared<AStarNode>(map.get(nextX, nextY));
+		nextNode->gCost = cost;
+		nextNode->hCost = calcHScore(nextNode->tile);
+		nextNode->parent = node; //original node, this will create a discontinuity or "jump" (funny that)
 		//check for the potential of parallel nodes
 		if (sector != map.get(adjX1, adjY1)->getSector() && sector == map.get(adjNextX1, adjNextY1)->getSector())
 		{
 			addNodes = true;
 			auto adjNode1 = std::make_shared<AStarNode>(map.get(adjNextX1, adjNextY1));
+			adjNode1->parent = nextNode;
 			adjNode1->gCost = cost;
 			adjNode1->hCost = calcHScore(adjNode1->tile);
 			openLookup[adjNode1->tile->getIndex()] = adjNode1->gCost;
@@ -150,6 +155,7 @@ void JPS::cardinalScan(std::shared_ptr<AStarNode> node, int dx, int dy)
 		{
 			addNodes = true;
 			auto adjNode2 = std::make_shared<AStarNode>(map.get(adjNextX2, adjNextY2));
+			adjNode2->parent = nextNode;
 			adjNode2->gCost = cost;
 			adjNode2->hCost = calcHScore(adjNode2->tile);
 			openLookup[adjNode2->tile->getIndex()] = adjNode2->gCost;
@@ -157,9 +163,6 @@ void JPS::cardinalScan(std::shared_ptr<AStarNode> node, int dx, int dy)
 		}
 		if (addNodes) //if we found a parallel node we add the next node to the list and return to pop the lowest score
 		{
-			auto nextNode = std::make_shared<AStarNode>(map.get(nextX,nextY));
-			nextNode->gCost = cost; 
-			nextNode->hCost = calcHScore(nextNode->tile);
 			openLookup[nextNode->tile->getIndex()] = nextNode->gCost;
 			openList.push(nextNode);
 			return;
@@ -169,6 +172,18 @@ void JPS::cardinalScan(std::shared_ptr<AStarNode> node, int dx, int dy)
 	}
 
 
+}
+
+void JPS::diagScan(std::shared_ptr<AStarNode> node, int dx, int dy)
+{
+	//origin node
+	const int CARD_COST = 100;
+	const int DIAG_COST = 141;
+	//auto curNode = node;
+	auto curTile = node->tile;
+	bool addNodes = false; //jps terminates when parallel nodes to the path have been added
+	auto sector = curTile->getSector();
+	uint cost = 0;
 }
 
 std::vector<std::shared_ptr<PathNode>> JPS::getOpenNodes()
