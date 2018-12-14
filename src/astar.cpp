@@ -55,7 +55,8 @@ void AStar::step()
 		auto n = std::make_shared<AStarNode>(tile);
 		n->parent = curNode;
 		n->hCost = calcHScore(n->tile);
-		n->gCost = map.isDiagonal(curNode->tile, n->tile) ? curNode->gCost + 14 : curNode->gCost + 10;
+		n->gCost = map.isDiagonal(curNode->tile, n->tile) ? curNode->gCost + 141 : curNode->gCost + 100;
+		//std::cout << "G,H:" << n->gCost << ", " << n->hCost <<std::endl;
 		if (n->gCost < openLookup[n->tile->getIndex()])
 		{
 			openLookup[n->tile->getIndex()] = n->gCost;
@@ -101,5 +102,5 @@ std::vector<std::shared_ptr<PathNode>> AStar::getOpenNodes()
 float AStar::calcHScore(const std::shared_ptr<Tile>& t)
 {
 	//todo pick between heuristics
-	return euclidean(map, t, map.get(destination));
+	return euclidean(map, t, map.get(destination))*100;
 }
