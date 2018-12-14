@@ -14,7 +14,7 @@ enum PathStatus
 struct PathNode
 {
 	std::shared_ptr<Tile> tile;
-	virtual uint getCost() const { return cost; }
+	virtual uint getCost() const { return gCost; }
 	std::shared_ptr<PathNode> parent = nullptr;
 	PathNode(std::shared_ptr<Tile> t) : tile(t) {}
 	virtual ~PathNode() {}
@@ -22,8 +22,7 @@ struct PathNode
 	friend bool operator > (const PathNode& lhs, const PathNode& rhs) { return rhs < lhs; }
 	friend bool operator <= (const PathNode& lhs, const PathNode& rhs) { return !(lhs > rhs); }
 	friend bool operator >= (const PathNode& lhs, const PathNode& rhs) { return !(lhs < rhs); }
-protected:
-	uint cost=0;
+	uint gCost=0;
 };
 
 class Pathfinding
