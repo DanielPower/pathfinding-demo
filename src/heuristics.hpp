@@ -5,13 +5,21 @@
 
 enum Heuristic
 {
+	MANHATTAN,
 	EUCLIDEAN,
 };
 
+inline uint manhattanCardinal(const Map& m, const std::shared_ptr<Tile>& t, const std::shared_ptr<Tile>& destination)
+{
+	const float x1 = t->getX(m.getWidth());
+	const float y1 = t->getY(m.getWidth());
+	const float x2 = destination->getX(m.getWidth());
+	const float y2 = destination->getY(m.getWidth());
+	return fabs(x1-x2) + fabs(y1-y2);
+}
+
 inline uint euclidean(const Map& m, const std::shared_ptr<Tile>& t, const std::shared_ptr<Tile>& destination)
 {
-
-
 	const float x1 = t->getX(m.getWidth());
 	const float y1 = t->getY(m.getWidth());
 	const float x2 = destination->getX(m.getWidth());

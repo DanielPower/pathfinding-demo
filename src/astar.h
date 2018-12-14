@@ -16,12 +16,11 @@ struct AStarNode : PathNode
 	uint hCost = 0;
 	explicit AStarNode(const std::shared_ptr<Tile>& t)
 		: PathNode(t)
-	{
-	}
+		{}
 	uint getCost() const override { return gCost + hCost; }
 };
 
-//Function used by our priority queue to compare nodes
+// Function used by our priority queue to compare nodes
 struct CompareNode : public std::binary_function<std::shared_ptr<AStarNode>, std::shared_ptr<AStarNode>, bool>
 {
 	bool operator()(const std::shared_ptr<AStarNode> lhs, const std::shared_ptr<AStarNode> rhs) const
@@ -30,8 +29,8 @@ struct CompareNode : public std::binary_function<std::shared_ptr<AStarNode>, std
 	}
 };
 
-//This is implemented because the default priority doesn't allow iterative access to the underlying vector
-//And we want access to the vector for visualization purposes
+// This is implemented because the default priority queue doesn't allow iterative access to the underlying vector
+// And we want access to the vector for visualization purposes
 class aStarQueue : public std::priority_queue<std::shared_ptr<AStarNode>, std::vector<std::shared_ptr<AStarNode>>, CompareNode> {
 public:
 	std::vector<std::shared_ptr<AStarNode>>& get_vec() { return c; }
@@ -57,9 +56,6 @@ public:
 	Heuristic heuristic = EUCLIDEAN;
 private:
 	uint calcHScore(const std::shared_ptr<Tile>& t);
-
 };
-
-
 
 #endif
