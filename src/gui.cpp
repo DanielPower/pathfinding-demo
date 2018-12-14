@@ -1,7 +1,7 @@
 #include "gui.h"
 
 Gui::Gui()
-: map(MapLoader::fromText("wheel.txt"))
+: map(MapLoader::fromText("default.txt"))
 {
 	// Create window
 	window.create(sf::VideoMode(1280, 720), "COMP 3200");
