@@ -1,7 +1,7 @@
 #include "gui.h"
 
 Gui::Gui()
-: map(MapLoader::fromText("default.txt"))
+	: map(MapLoader::fromText("default.txt"))
 {
 	// Create window
 	window.create(sf::VideoMode(1280, 720), "COMP 3200");
@@ -61,7 +61,7 @@ Gui::Gui()
 	// Set initial view
 	view.reset(sf::FloatRect(0.f, 0.f, 1280, 720));
 	view.zoom(0.1);
-	view.setCenter(map.getWidth()/2, map.getHeight()/2);
+	view.setCenter(map.getWidth() / 2, map.getHeight() / 2);
 	zoom = 0.1;
 
 	// Reset path time
@@ -195,7 +195,7 @@ void Gui::render()
 	ImGui::Begin("Hello World!");
 
 	// Display amount of time running current path
-	ImGui::Text("Path Time: %f ms", pathTime/1000);
+	ImGui::Text("Path Time: %f ms", pathTime / 1000);
 
 	// Checkbox to continuously run pathfinding
 	ImGui::Checkbox("Run", &continuousStep);
@@ -222,7 +222,7 @@ void Gui::render()
 	}
 
 	// Select patfhinder
-	const char* pathfinderNames[] = {"BFS", "Astar", "JPS"};
+	const char* pathfinderNames[] = { "BFS", "Astar", "JPS" };
 	if (ImGui::ListBox("Algorithm", &selectedPathfinder, pathfinderNames, IM_ARRAYSIZE(pathfinderNames), 3))
 	{
 		currentPathfinder = pathfinders[selectedPathfinder];
@@ -237,16 +237,18 @@ void Gui::render()
 
 	if (showLists)
 	{
+		auto openNodes = currentPathfinder->getOpenNodes();
+		auto closedNodes = currentPathfinder->getClosedList();
 		ImGui::BeginChild("List View");
 		ImGui::Columns(2, NULL, false);
-		ImGui::Text("Open Nodes");
-		for (auto node : currentPathfinder->getOpenNodes())
+		ImGui::Text("Open Nodes: %d", openNodes.size());
+		for (auto node : openNodes)
 		{
 			auto& tile = node->tile;
-			ImGui::Text("x=%d, y=%d, cost:%d", tile->getX(map.getWidth()), tile->getY(map.getWidth()),node->getCost());
+			ImGui::Text("x=%d, y=%d, cost:%d", tile->getX(map.getWidth()), tile->getY(map.getWidth()), node->getCost());
 		}
 		ImGui::NextColumn();
-		ImGui::Text("Closed Nodes");
+		ImGui::Text("Closed Nodes: %d",closedNodes.size());
 		for (auto tile : currentPathfinder->getClosedList())
 		{
 			ImGui::Text("x=%d, y=%d", tile->getX(map.getWidth()), tile->getY(map.getWidth()));

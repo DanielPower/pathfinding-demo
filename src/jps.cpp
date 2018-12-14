@@ -7,6 +7,7 @@ void JPS::setGoal(std::shared_ptr<Tile> _origin, std::shared_ptr<Tile> _destinat
 	destination = _destination->getIndex();
 	status = IN_PROGRESS;
 	openList.get_vec().clear();
+	openLookup = std::vector<uint>(map.getWidth()*map.getHeight(), UINT_MAX);
 	closedList.clear();
 
 	auto og = std::make_shared<AStarNode>(_origin);
@@ -54,14 +55,12 @@ void JPS::step()
 		auto n = std::make_shared<AStarNode>(tile);
 		n->parent = curNode;
 		n->hCost = calcHScore(n->tile);
-		n->gCost = curNode->gCost + 10;
-		n->gCost = map.isDiagonal(curNode->tile, n->tile)? curNode->gCost + 14 : curNode->gCost + 10;
-		auto cListCheck = closedList.find(n->tile->getIndex());
-		if (cListCheck != closedList.end())
+		n->gCost = map.isDiagonal(curNode->tile, n->tile) ? curNode->gCost + 141 : curNode->gCost + 100;
+		if (n->gCost < openLookup[n->tile->getIndex()])
 		{
-			if (cListCheck->second > n->getCost())continue;
+			openLookup[n->tile->getIndex()] = n->gCost;
+			openList.push(n);
 		}
-		openList.push(n);
 	}
 }
 
@@ -102,5 +101,5 @@ std::vector<std::shared_ptr<PathNode>> JPS::getOpenNodes()
 float JPS::calcHScore(const std::shared_ptr<Tile>& t)
 {
 	//todo pick between heuristics
-	return euclidean(map, t, map.get(destination));
+	return euclidean(map, t, map.get(destination))*100;
 }

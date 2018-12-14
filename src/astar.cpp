@@ -56,7 +56,6 @@ void AStar::step()
 		n->parent = curNode;
 		n->hCost = calcHScore(n->tile);
 		n->gCost = map.isDiagonal(curNode->tile, n->tile) ? curNode->gCost + 141 : curNode->gCost + 100;
-		//std::cout << "G,H:" << n->gCost << ", " << n->hCost <<std::endl;
 		if (n->gCost < openLookup[n->tile->getIndex()])
 		{
 			openLookup[n->tile->getIndex()] = n->gCost;
