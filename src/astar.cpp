@@ -33,7 +33,7 @@ void AStar::step()
 	// If we've reached the destination, create path
 	if (curNode->tile->getIndex() == destination)
 	{
-		Pathfinding::makePath(*curNode); //todo update the method to only take refs
+		Pathfinding::makePath(*curNode);
 		status = FINISHED;
 		return;
 	}
@@ -100,6 +100,5 @@ std::vector<std::shared_ptr<PathNode>> AStar::getOpenNodes()
 
 float AStar::calcHScore(const std::shared_ptr<Tile>& t)
 {
-	//todo pick between heuristics
 	return euclidean(map, t, map.get(destination))*100;
 }

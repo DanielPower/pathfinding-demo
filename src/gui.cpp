@@ -192,7 +192,7 @@ void Gui::render()
 	ImGui::SFML::Update(window, deltaClock.restart());
 
 	// Setup ImGui Window
-	ImGui::Begin("Hello World!");
+	ImGui::Begin("Pathfinding Selections");
 
 	// Display amount of time running current path
 	ImGui::Text("Path Time: %f ms", pathTime / 1000);
